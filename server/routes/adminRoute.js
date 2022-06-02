@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const validInfo = require("../middleware/validInfo");
-const controller = require('./admin');
+const controller = require('../controller/adminController');
 
 
 router.post('/create-user', validInfo ,controller.register);

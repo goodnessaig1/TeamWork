@@ -1,14 +1,11 @@
-// const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const pool = require('../db');
-// const authorization = require('../middleware/authorization');
-const validInfo = require('../middleware/validInfo');
 const jwtGenerator = require('../utils/jwtGenerator');
-const queries = require('./queries');
+const queries = require('../queries/adminQuery');
 
 
  
-// register
+// ADMIN AND EMPLOYEE REGISTER
 
 const register = async(req, res)=>{
     try {
