@@ -1,5 +1,10 @@
 const express = require('express');
+<<<<<<< Updated upstream
 const users = require('./routes/routes')
+=======
+const users = require('./routes/adminRoute')
+const gifRoutes = require('./routes/gifRoute');
+>>>>>>> Stashed changes
 const app = express();
 const cors = require('cors');
 
@@ -7,10 +12,11 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-
 //   REGISTER AND LOGIN ROUTES
  app.use('/auth/v1', users);
 
+ // GIF ROUTE
+ app.use('/v1/gifs', gifRoutes);
 
 const port = process.env.PORT || 3000; 
 app.listen(port, ()=>{

@@ -24,3 +24,9 @@ CREATE TABLE users (
     isAdmin,
      address)
       VALUES ('goodness', 'aig', 'goodness@gmail.com','password', 'male', 'None', 'develope', true ,'No 7 eyaen, benin city');
+
+      CREATE TABLE gifs (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(128) NOT NULL,
+      imageUrl VARCHAR(128) NOT NULL,
+      createdOn DATE NOT NULL );
