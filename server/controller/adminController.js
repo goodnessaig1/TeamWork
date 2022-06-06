@@ -5,6 +5,7 @@ const queries = require('../queries/adminQuery');
 
 
  
+
 // ADMIN AND EMPLOYEE REGISTER
 
 const register = async(req, res)=>{
