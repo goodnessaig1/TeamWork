@@ -19,7 +19,7 @@ describe('ADMIN AND EMPLOYEE CREATE ACCOUNT AND SIGNUP ROUTES',()=>{
                 {
                 "firstname": "goodness",
                 "lastname": "ose",
-                "email": "goodness68@gmail.com",
+                "email": "goodness65@gmail.com",
                 "password": "password123",
                 "gender": "MALE",
                 "jobRole" : "Developer",
