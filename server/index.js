@@ -1,4 +1,12 @@
 const express = require('express');
+
+const users = require('./routes/adminRoute')
+const gifRoutes = require('./routes/gifRoute');
+
+const users = require('./routes/adminRoute')
+
+const users = require('./routes/routes')
+
 const users = require('./routes/adminRoute')
 const gifRoutes = require('./routes/gifRoute');
 
