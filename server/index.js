@@ -1,10 +1,7 @@
 const express = require('express');
-<<<<<<< Updated upstream
-const users = require('./routes/routes')
-=======
 const users = require('./routes/adminRoute')
 const gifRoutes = require('./routes/gifRoute');
->>>>>>> Stashed changes
+
 const app = express();
 const cors = require('cors');
 

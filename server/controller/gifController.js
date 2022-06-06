@@ -22,7 +22,7 @@ const createGif =  (req, res) =>{
       db.pool.connect((err, client, done) =>  {
         const createdOn = new Date
         //  i can also use *Date().toLocaleString();
-        // query
+        
         const values = [data.title, image.url, createdOn];
         client.query(queries.createNewGif, values)
           .then((result) => {

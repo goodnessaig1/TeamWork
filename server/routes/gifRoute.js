@@ -1,5 +1,4 @@
 const router = require("express").Router()
-const validInfo = require("../middleware/validInfo");
 const controller = require('../controller/gifController');
 
 
