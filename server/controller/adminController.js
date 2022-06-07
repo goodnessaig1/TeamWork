@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const db = require('../db');
 const jwtGenerator = require('../utils/jwtGenerator');
 const queries = require('../queries/adminQuery');
-
+const jwt = require('jsonwebtoken')
 
  
 // ADMIN AND EMPLOYEE REGISTER
@@ -66,7 +66,10 @@ const loginUser = async  (req, res) => {
             ({message: "Password Or Email is Incorrect"})
         }
 
-      const token = jwtGenerator(user.rows[0].id);
+      const token = jwt.sign({
+          userId: user.rows[0].id,
+          email: user.rows[0].email,
+    }, 'jwtPrivateKey');
       return res.json({ status: "success", data: {
             message: "You have succefully log in",
             "token": token,
