@@ -1,15 +1,23 @@
-const jwt = require('jsonwebtoken');
+/* eslint-disable consistent-return */
+const jwt = require("jsonwebtoken");
+// require("dotenv").config();
 
-const authorization = (req, res, next) => {
-  const token = req.header('token');
-  if (!token) return res.status(401).send('Access denied. No token provided.');
+
+const authorization = (req, res, next)=> {
+  const token = req.header("token");
+
+  if (!token) {
+    return res.status(403).json({ msg: "authorization denied" });
+  }
+
   try {
-    const decodedPayload = jwt.verify(token, 'jwtPrivateKey');
-    req.user = decodedPayload;
+    const verify = jwt.verify(token, 'jwtPrivateKey');
+
+    req.user = verify.user;
     next();
-  } catch (ex) {
-    res.status(400).send('Invalid token.');
+  } catch (err) {
+    res.status(401).json({ msg: "Token is not valid" });
   }
 };
 
-module.exports = authorization;
+module.exports = authorization
