@@ -1,6 +1,8 @@
 const cloudinary = require('cloudinary').v2;
-const pool = require('../db');
 const queries = require('../queries/gifQuery');
+require('../models/gifModel')();
+const pool = require('../models/db');
+
 
 require('dotenv').config()
 
@@ -11,12 +13,8 @@ cloudinary.config({
 })
 
 
-
-
-
-const createGif = async (req, res) =>{
-  
-    try {
+class GifController {
+    static async createGif(req, res) {
         const { title, image} = req.body
           let imageURL;
         await cloudinary.uploader.upload(image, (err, result) => {
@@ -41,14 +39,52 @@ const createGif = async (req, res) =>{
               }
             });
 
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Server Error");
     }
+
+
+
 }
 
 
 
-module.exports = {
-    createGif, 
-}
+module.exports = GifController;
+
+
+// const createGif = async (req, res) =>{
+  
+//     try {
+//         const { title, image} = req.body
+//           let imageURL;
+//         await cloudinary.uploader.upload(image, (err, result) => {
+//             if (err) {
+//                 return res.status(500).send({
+//                     status: "error",
+//                     message: `Error uploading image`
+//                 })
+//             }
+//             imageURL = result.secure_url;
+//         })
+//          const createdOn = new Date
+//         const values = [title, imageURL, createdOn];
+//         const images = await pool.query(queries.createNewGif, values)
+//       return  res.status(201).send({
+//               status: 'success',
+//               data: {
+//                 gifId: image.id,
+//                 message: 'GIF image successfully posted',
+//                     images: images.rows[0],
+//                     imageUrl: image.imageurl,
+//               }
+//             });
+
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).send("Server Error");
+//     }
+// }
+
+
+
+// module.exports = {
+//     createGif, 
+// }
