@@ -8,7 +8,9 @@ module.exports = () => {
             id SERIAL PRIMARY KEY,
             title VARCHAR(128) NOT NULL,
             imageUrl VARCHAR(128) NOT NULL,
-            createdOn DATE NOT NULL )`
+            createdAt timestamp with time zone NOT NULL,
+            createdBy VARCHAR(128) NOT NULL
+            )`
         );
     } catch (error) {
       console.log(error);

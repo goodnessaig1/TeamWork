@@ -10,7 +10,9 @@ CREATE TABLE users (
     jobRole VARCHAR(255),
     department VARCHAR(255),
     isAdmin BOOLEAN NOT NULL DEFAULT false,
-    address VARCHAR(255));
+    address VARCHAR(255),
+    createdat  DATE NOT NULL,
+    updatedat  DATE NOT NULL);
 
 
 --Insert fake users
