@@ -1,7 +1,7 @@
 CREATE DATABASE team-work;
 
 CREATE TABLE users (
-    Id SERIAL NOT NULL PRIMARY KEY,
+    id SERIAL NOT NULL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
@@ -36,4 +36,4 @@ CREATE TABLE users (
         created_by VARCHAR(128) NOT NULL,
         user_id SERIAL NOT NULL,
         FOREIGN KEY (user_id) 
-        REFERENCES users (Id));
+        REFERENCES users (id));

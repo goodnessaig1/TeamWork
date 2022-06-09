@@ -14,7 +14,7 @@ module.exports = () => {
             user_id SERIAL NOT NULL,
             PRIMARY KEY (gif_id),
             FOREIGN KEY (user_id) 
-            REFERENCES users (Id)
+            REFERENCES users (id)
             )`
         );
     } catch (error) {

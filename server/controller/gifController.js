@@ -30,9 +30,9 @@ class GifController {
             publicId = result.public_id
         })
          const created_at = new Date
-         const created_by = req.user.email;
          const userId = req.user.userId
-        const values = [title, imageURL, publicId, created_at, created_by, userId];
+        const values = [title, imageURL, publicId, created_at, userId];
+
         const images = await pool.query(queries.createNewGif, values)
       return  res.status(201).send({
               status: 'success',

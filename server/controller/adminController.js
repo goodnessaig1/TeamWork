@@ -1,10 +1,9 @@
 const bcrypt = require('bcrypt');
 const pool = require('../models/db');
-// const jwtGenerator = require('../utils/jwtGenerator');
 const queries = require('../queries/adminQuery');
-const jwt = require('jsonwebtoken')
 require('../models/userModel')();
-const { createToken, verifyToken } = require('../utils/jwtGenerator')
+const { createToken } = require('../utils/jwtGenerator')
+
 
 
 
@@ -14,13 +13,14 @@ class UserController {
 
   static async register(req, res) {
         try {
-          const { firstname,lastname,email,password,gender,jobRole, department,isAdmin, address } = req.body;
+         const { firstName, lastName, email, password, gender, jobRole, department,isAdmin, address } = req.body;
 
-        const saltRounds = 10;
+         const saltRounds = 10;
          const salt = await bcrypt.genSalt(saltRounds);
          const bcryptPassword = await bcrypt.hash(password, salt);
-          const createdAt = new Date
-          const updatedAt = new Date
+         
+         const createdAt = new Date
+         const updatedAt = new Date
          let user = await pool.query(queries.newUser, [email]);
     if (user.rowCount > 0) {
       return res.status(401).json({
@@ -30,8 +30,12 @@ class UserController {
         },
       });
     }
-     user = await pool.query(queries.createNewUser ,[firstname, lastname, email, bcryptPassword,gender, jobRole,department,isAdmin, address, createdAt, updatedAt]);
-         const token = createToken({email: user.rows[0].email});
+     user = await pool.query(queries.createNewUser ,[firstName, lastName, email, bcryptPassword,gender, jobRole,department,isAdmin, address, createdAt, updatedAt]);
+
+     const token = createToken({
+           email: user.rows[0].email,
+           userId: user.rows[0].id
+          });
          res.status(201).json({ status: "success", data: {
              message: "User account successfully created",
              "token": token,
@@ -41,7 +45,7 @@ class UserController {
          }  }) 
         }catch (err) {
          console.error(err.message);
-        res.status(500).send("Server Error");
+         res.status(500).send("Server Error");
     }
   }
 
@@ -58,11 +62,13 @@ class UserController {
         if (user.rows.length === 0) {
             return res.status(401).json({status: "password or email incorrect"});
         } 
+
         const validPassword = await bcrypt.compare(password, user.rows[0].password);
         if(!validPassword){
             return res.status(401).json
             ("Password Or Email is Incorrect")
         }
+
         const token = createToken({
           email: user.rows[0].email,
           userId: user.rows[0].id
