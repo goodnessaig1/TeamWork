@@ -18,6 +18,7 @@ class GifController {
         try {
             const { title, image} = req.body
           let imageURL;
+          let publicId;
         await cloudinary.uploader.upload(image, (err, result) => {
             if (err) {
                 return res.status(500).send({
@@ -26,18 +27,20 @@ class GifController {
                 })
             }
             imageURL = result.secure_url;
+            publicId = result.public_id
         })
-         const createdAt = new Date
-         const createdBy = req.user.email;
-        const values = [title, imageURL, createdAt, createdBy];
+         const created_at = new Date
+         const created_by = req.user.email;
+         const userId = req.user.userId
+        const values = [title, imageURL, publicId, created_at, created_by, userId];
         const images = await pool.query(queries.createNewGif, values)
       return  res.status(201).send({
               status: 'success',
               data: {
-                gifId: image.id,
+                gifId: image.gif_id,
                 message: 'GIF image successfully posted',
                     images: images.rows[0],
-                    imageUrl: image.imageurl,
+                    imageUrl: image.image_url,
               }
             });
         }catch (err) {

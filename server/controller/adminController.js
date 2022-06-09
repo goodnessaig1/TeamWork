@@ -36,8 +36,8 @@ class UserController {
              message: "User account successfully created",
              "token": token,
              "userId": user.rows[0].id,
-             "createdAt": user.rows[0].createdat,
-             "updatedAt": user.rows[0].updatedat
+             "createdAt": user.rows[0].created_at,
+             "updatedAt": user.rows[0].updated_at
          }  }) 
         }catch (err) {
          console.error(err.message);
@@ -63,7 +63,9 @@ class UserController {
             return res.status(401).json
             ("Password Or Email is Incorrect")
         }
-        const token = createToken({email: user.rows[0].email
+        const token = createToken({
+          email: user.rows[0].email,
+          userId: user.rows[0].id
     });
         res.json({ status: "success", data: {
             message: "You have succefully log in",
