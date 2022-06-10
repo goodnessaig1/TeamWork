@@ -1,7 +1,6 @@
 var pg = require("pg");
-// const { Pool, client } = require("pg");
 
-// var conString = process.env.DB_URL;
+
 var client = new pg.Client({
     user: "postgres",
     host: "localhost",

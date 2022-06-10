@@ -22,27 +22,27 @@ class UserController {
          const createdAt = new Date
          const updatedAt = new Date
          let user = await pool.query(queries.newUser, [email]);
-    if (user.rowCount > 0) {
-      return res.status(401).json({
-        status: 'Failed',
-        data: {
-          message: 'User with this email already exist',
-        },
-      });
-    }
-     user = await pool.query(queries.createNewUser ,[firstName, lastName, email, bcryptPassword,gender, jobRole,department,isAdmin, address, createdAt, updatedAt]);
+        if (user.rowCount > 0) {
+            return res.status(401).json({
+              status: 'Failed',
+              data: {
+                message: 'User with this email already exist',
+              },
+        });
+        }
+        user = await pool.query(queries.createNewUser ,[firstName, lastName, email, bcryptPassword,gender, jobRole,department,isAdmin, address, createdAt, updatedAt]);
 
-     const token = createToken({
-           email: user.rows[0].email,
-           userId: user.rows[0].id
-          });
+        const token = createToken({
+              email: user.rows[0].email,
+              userId: user.rows[0].id
+              });
          res.status(201).json({ status: "success", data: {
              message: "User account successfully created",
              "token": token,
              "userId": user.rows[0].id,
              "createdAt": user.rows[0].created_at,
              "updatedAt": user.rows[0].updated_at
-         }  }) 
+         }}) 
         }catch (err) {
          console.error(err.message);
          res.status(500).send("Server Error");
@@ -65,8 +65,7 @@ class UserController {
 
         const validPassword = await bcrypt.compare(password, user.rows[0].password);
         if(!validPassword){
-            return res.status(401).json
-            ("Password Or Email is Incorrect")
+            return res.status(401).json("Password Or Email is Incorrect")
         }
 
         const token = createToken({

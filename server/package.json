@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha",
     "start": "nodemon index.js",
-    "tables": "node ./models/adminModels"
+    "migration": "node migration/models.js"
   },
   "keywords": [],
   "author": "",

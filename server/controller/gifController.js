@@ -31,18 +31,18 @@ class GifController {
         })
          const created_at = new Date
          const userId = req.user.userId
-        const values = [title, imageURL, publicId, created_at, userId];
+         const values = [title, imageURL, publicId, created_at, userId];
 
         const images = await pool.query(queries.createNewGif, values)
-      return  res.status(201).send({
-              status: 'success',
-              data: {
-                gifId: image.gif_id,
-                message: 'GIF image successfully posted',
-                    images: images.rows[0],
-                    imageUrl: image.image_url,
-              }
-            });
+          return  res.status(201).send({
+                status: 'success',
+                data: {
+                  gifId: image.gif_id,
+                  message: 'GIF image successfully posted',
+                      images: images.rows[0],
+                      imageUrl: image.image_url,
+                }
+              });
         }catch (err) {
          console.error(err.message);
         res.status(500).send("Server Error");

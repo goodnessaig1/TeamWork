@@ -33,7 +33,35 @@ CREATE TABLE users (
         image_url VARCHAR(128) NOT NULL,
         public_id varchar NOT NULL,
         created_at timestamp with time zone NOT NULL,
-        created_by VARCHAR(128) NOT NULL,
         user_id SERIAL NOT NULL,
         FOREIGN KEY (user_id) 
         REFERENCES users (id));
+
+
+
+
+
+
+        -- Table: public.gifs
+
+-- DROP TABLE IF EXISTS public.gifs;
+
+CREATE TABLE IF NOT EXISTS public.gifs
+(
+    gif_id integer NOT NULL DEFAULT nextval('gifs_gif_id_seq'::regclass),
+    title character varying(128) COLLATE pg_catalog."default" NOT NULL,
+    image_url character varying(128) COLLATE pg_catalog."default" NOT NULL,
+    public_id character varying COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    user_id integer NOT NULL DEFAULT nextval('gifs_user_id_seq'::regclass),
+    CONSTRAINT gifs_pkey PRIMARY KEY (gif_id),
+    CONSTRAINT gifs_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.gifs
+    OWNER to postgres;
