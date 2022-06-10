@@ -1,14 +1,5 @@
-const {Client} = require('pg')
+const client = require('../models/db')
 
-const client = new Client({
-    host: "localhost",
-    port : 5000,
-    user: "postgres",
-    password: "osemudiame1",
-    database: "team"
-})
-
-client.connect();
 
 let query = `CREATE TABLE IF NOT EXISTS users (
     id SERIAL NOT NULL PRIMARY KEY,
@@ -33,6 +24,8 @@ let query = `CREATE TABLE IF NOT EXISTS users (
         user_id SERIAL NOT NULL,
         FOREIGN KEY (user_id) 
         REFERENCES users (id));`
+
+        
 client.query(query, (err, res)=>{
     if(!err){
         console.log(res.rows);
