@@ -19,15 +19,15 @@ class GifController {
             const { title, image} = req.body
           let imageURL;
           let publicId;
-        await cloudinary.uploader.upload(image, (err, result) => {
+        await cloudinary.uploader.upload(image, (err, response) => {
             if (err) {
                 return res.status(500).send({
                     status: "error",
                     message: `Error uploading image`
                 })
             }
-            imageURL = result.secure_url;
-            publicId = result.public_id
+            imageURL = response.secure_url;
+            publicId = response.public_id
         })
          const created_at = new Date
          const userId = req.user.userId

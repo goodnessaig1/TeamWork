@@ -24,7 +24,8 @@ let query = `CREATE TABLE IF NOT EXISTS users (
         user_id SERIAL NOT NULL,
         FOREIGN KEY (user_id) 
         REFERENCES users (id));`
-
+    
+        
         
 client.query(query, (err, res)=>{
     if(!err){
