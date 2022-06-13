@@ -2,14 +2,23 @@
 const bcrypt = require('bcrypt');
 const pool = require('../models/db');
 const queries = require('../queries/adminQuery');
-require('../models/userModel')();
 const { createToken } = require('../utils/jwtGenerator');
-
+const { validateSignup } = require('../middleware/validator/userSignupValidator');
+const { validateLogin } = require('../middleware/validator/validateLogin');
 // ADMIN AND EMPLOYEE REGISTER
 
 class UserController {
   static async register(req, res) {
     try {
+
+      const { error } = validateSignup(req.body);
+    if (error) {
+      return res.status(400).json({
+        status: 'error',
+        error: error.details[0].message,
+      });
+    }
+
       const {
         firstName, lastName, email, password, gender, jobRole, department, isAdmin,address,} = req.body;
 
@@ -28,7 +37,8 @@ class UserController {
           },
         });
       }
-      user = await pool.query(queries.createNewUser, [firstName, lastName, email, password, gender, jobRole, department, isAdmin,address, createdAt, updatedAt,
+      const validEmail = email.toLowerCase();
+      user = await pool.query(queries.createNewUser, [firstName, lastName, validEmail, bcryptPassword, gender, jobRole, department, isAdmin,address, createdAt, updatedAt,
       ]);
 
       const token = createToken({
@@ -55,6 +65,15 @@ class UserController {
 
   static async loginUser(req, res) {
     try {
+
+      const { error } = validateLogin(req.body);
+    if (error) {
+      return res.status(400).json({
+        status: 'error',
+        error: error.details[0].message,
+      });
+    }
+
       const { email, password } = req.body;
 
       // eslint-disable-next-line prettier/prettier
@@ -62,7 +81,6 @@ class UserController {
       if (user.rows.length === 0) {
         return res.status(401).json({ status: 'password or email incorrect' });
       }
-
       const validPassword = await bcrypt.compare(
         password,
         user.rows[0].password

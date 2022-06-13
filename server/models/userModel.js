@@ -1,9 +1,9 @@
-const db = require("./db");
+const pool = require("./db");
 
 module.exports = () => {
   const createGenresTable = async () => {
     try {
-      await db.query(`CREATE TABLE IF NOT EXISTS (
+      await pool.query(`CREATE TABLE IF NOT EXISTS (
       users 
       id SERIAL NOT NULL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,

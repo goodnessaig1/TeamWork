@@ -1,6 +1,7 @@
-CREATE DATABASE team-work;
+const pool = require('../models/db');
 
-CREATE TABLE users (
+const createTable = pool.query(
+  `CREATE TABLE IF NOT EXISTS users (
     id SERIAL NOT NULL PRIMARY KEY,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
@@ -12,22 +13,9 @@ CREATE TABLE users (
     is_admin BOOLEAN NOT NULL DEFAULT false,
     address VARCHAR(255),
     created_at  DATE NOT NULL,
-    updated_at  DATE NOT NULL);
+    updated_at  DATE NOT NULL);;
 
-
---Insert fake users
-     INSERT INTO users (firstname,
-     lastname,
-    email,
-    password,
-     gender,
-      jobRole,
-    department,
-    isAdmin,
-     address)
-      VALUES ('goodness', 'aig', 'goodness@gmail.com','password', 'male', 'None', 'develope', true ,'No 7 eyaen, benin city');
-
-      CREATE TABLE gifs (
+  CREATE TABLE IF NOT EXISTS gifs (
         gif_id SERIAL PRIMARY KEY,
         title VARCHAR(128) NOT NULL,
         image_url VARCHAR(128) NOT NULL,
@@ -36,3 +24,6 @@ CREATE TABLE users (
         user_id SERIAL NOT NULL,
         FOREIGN KEY (user_id) 
         REFERENCES users (id));
+        
+  `);
+module.exports = createTable
