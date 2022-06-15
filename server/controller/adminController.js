@@ -75,9 +75,9 @@ class UserController {
     }
 
       const { email, password } = req.body;
-
+      const validEmail = email.toLowerCase();
       // eslint-disable-next-line prettier/prettier
-        const user = await pool.query(queries.logInUser, [ email])
+        const user = await pool.query(queries.logInUser, [ validEmail])
       if (user.rows.length === 0) {
         return res.status(401).json({ status: 'password or email incorrect' });
       }
