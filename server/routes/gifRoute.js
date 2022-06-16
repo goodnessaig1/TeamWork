@@ -4,7 +4,7 @@ const authorization = require("../middleware/authorization");
 
 
 
-router.post('/', authorization, controller.createGif );
+router.post('/', authorization , controller.createGif );
 
 
 module.exports =  router
