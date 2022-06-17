@@ -27,9 +27,7 @@ class UserController {
       if (user.rowCount > 0) {
         return res.status(401).json({
           status: 'Failed',
-          data: {
-            message: 'User with this email already exist',
-          },
+            message: 'User with this email already exist'
         });
       }
       user = await pool.query(queries.createNewUser, [firstName, lastName, email.toLowerCase(), bcryptPassword, gender, jobRole, department, isAdmin,address, createdAt, updatedAt,
@@ -66,7 +64,7 @@ class UserController {
       // eslint-disable-next-line prettier/prettier
         const user = await pool.query(queries.logInUser, [ email.toLowerCase()])
       if (user.rows.length === 0) {
-        return res.status(401).json({ status: 'password or email incorrect' });
+        return res.status(401).json({ status: 'Failed', message: 'password or email incorrect' });
       }
       const validPassword = await bcrypt.compare(
         password,
