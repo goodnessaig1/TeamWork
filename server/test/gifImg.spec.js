@@ -15,7 +15,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
     describe('POST /auth/v1/login',()=>{
     it('It should login a user with a valid email and password', (done)=>{
             chai.request(server)
-            .post('/auth/v1/login', validation.logIn)
+            .post('/auth/v1/login')
             .set('Accept', 'application/json')
             .send(
                 {
@@ -56,6 +56,25 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
             )
             .end((err, response) =>{
                 response.should.have.status(401)
+                response.body.should.be.a('object');
+                done();
+            })
+        })
+        
+        })
+
+        // GIF COMMENT
+        describe('POST /v1/gifs/1/comment',()=>{
+        it('It should post a comment', (done)=>{
+            chai.request(server)
+            .post('/v1/gifs/1/comment')
+            .set("authorization", "Bearer" + token)
+            .send(
+                {
+                   "comment": "This is my second comment on my first post"
+                }
+            )
+            .end((err, response) =>{
                 response.body.should.be.a('object');
                 done();
             })

@@ -5,13 +5,11 @@ const authorization = require("../middleware/authorization");
 const validation = require("../middleware/validation");
 
 
-
 //   GIF ROUTES FOR UPLOADING
-router.post('/', authorization , controller.createGif );
-
+router.post('/',authorization, controller.createGif );
 
 //  GIF COMMENT ROUTES
-router.post('/:gifId/comment', validation.comment, authorization, commentController.createComment)
+router.post('/:gifId/comment',authorization, validation.comment, commentController.createComment)
 
 
 module.exports =  router

@@ -12,22 +12,21 @@ class gifController {
         const { comment } = req.body;
         const { gifId } = req.params;
         const createdAt = moment().format('YYYY-MM-DD ');
-        const createdBy = req.user.email;
         const userId = req.user.userId;
 
-        const gif = await pool.query(`SELECT * FROM gifs WHERE gif_id = ${gifId}`);
+        const gif = await pool.query(`SELECT * FROM gifs WHERE gif_id = $1`,[gifId]);
         if (gif.rows.length === 0) {
         return res.status(404).json({
             status: 'error',
             error: 'Gif with the specified ID NOT found',
         });
         }
-        const user = await pool.query(`SELECT * FROM users WHERE id = ${userId}`);
-        const userGif = await pool.query(`SELECT * FROM gifs WHERE user_id = ${userId}`);
+        const user = await pool.query(`SELECT * FROM users WHERE id = $1`,[userId]);
+        const userGif = await pool.query(`SELECT * FROM gifs WHERE user_id = $1`,[userId]);
 
         const userName = user.rows[0].first_name;
         const imgUrl = userGif.rows[0].image_url;
-        const values = [gifId, comment, userId, createdBy, createdAt,imgUrl, userName ];
+        const values = [gifId, comment, userId, createdAt,imgUrl, userName ];
 
         const gifComment =   await pool.query(queries.createGifComment, values);
         
