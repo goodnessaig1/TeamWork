@@ -5,11 +5,20 @@ language: node_js
 node_js:
   - node
 
+install:
+  - npm install
+services:
+  - postgresql
+
+env:
+  global:
+    - NODE_ENV=test
+
+before_script:
+  - psql -c 'create database team;' -U postgres
+  - psql -c "CREATE USER goodness WITH PASSWORD null;" -U postgres
+
 script:
-  - npm run coveralls
-
-notifications:
-  email: false
-
+  - npm test
 after_success:
-  - npm run coveralls
+  - npm run coverage
