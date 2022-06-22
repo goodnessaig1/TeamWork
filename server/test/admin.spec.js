@@ -10,15 +10,10 @@ chai.should();
 chai.use(chaiHttp);
     const email = "goodnessadigd213@gmail.com"
 
-describe('api/v1/auth/create-user', () => {
-//  IT SHOULD DELETE ANY USER WITH THIS EMAIL SO IT CAN RE-REGISTER
-  afterEach(async () => {
-    await pool.query('DELETE FROM users WHERE email =$1',[email]);
-  });
-
-
 
 describe('ADMIN AND EMPLOYEE CREATE ACCOUNT AND SIGNUP ROUTES',()=>{
+    
+    
     // TESTING THE CREATE-ACCOUNT ROUTE
     describe('POST /auth/v1/create-user',()=>{
         it('it should create a new user', (done)=>{
@@ -44,7 +39,13 @@ describe('ADMIN AND EMPLOYEE CREATE ACCOUNT AND SIGNUP ROUTES',()=>{
                 done();
             })
         })
-            
+
+        //  IT SHOULD DELETE ANY USER WITH THIS EMAIL SO IT CAN RE-REGISTER
+      after(async () => {
+        await pool.query('DELETE FROM users WHERE email =$1',[email]);
+    });
+
+    
         it('It should not be able to create a user if user with same email exist', (done)=>{
             chai.request(server)
             .post('/auth/v1/create-user')
@@ -116,7 +117,7 @@ describe('ADMIN AND EMPLOYEE CREATE ACCOUNT AND SIGNUP ROUTES',()=>{
                 done();
             })
         })
-    })
+
   });
 
     // LOGIN ROUTE TEST
