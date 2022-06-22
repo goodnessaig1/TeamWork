@@ -62,9 +62,26 @@ const comment = (req, res, next) => {
         }
     });
 }
+const category = (req, res, next) => {
+    const validationRule = {
+        "categoryName": "required|string|max:12"
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(400).json({
+                    success: false,
+                    message: 'Length of categoryName exceeded. Fill in an appropriate categoryName',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
 
 module.exports = { 
   signup,
   logIn,
-  comment
+  comment,
+  category
 }

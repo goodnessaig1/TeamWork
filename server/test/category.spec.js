@@ -4,18 +4,21 @@ let server = require('../index');
 const pool = require('../models/db')
 
 
-const comment = "This is my second comment on my third post"
- afterEach(async () => {
-    await pool.query('DELETE FROM gif_comment WHERE comments =$1',[comment]);
-  });
-
 // ASSERTION STYLE
 chai.should();
 
 chai.use(chaiHttp);
- let token;
 
-describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
+const categoryName = "election"
+
+//  IT SHOULD DELETE ANY CATEGORY WITH THIS NAME
+  afterEach(async () => {
+    await pool.query('DELETE FROM categories WHERE category_name =$1',[categoryName]);
+  });
+
+let token;
+
+describe('ADMIN CAN ADD CATEGORIES WHICH USERS CAN USE TO DETERMINE THE FIELD THEY WANT OT WRITE AN ARTICLE ON ',()=>{
     // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
     describe('POST /auth/v1/login',()=>{
     it('It should login a user with a valid email and password', (done)=>{
@@ -33,50 +36,16 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
                 done();
             })
         })
-        })
-    describe('POST /v1/gifs',()=>{
-        it('It should post an image to cloudinaary and also return the link', (done)=>{
-            chai.request(server)
-            .post('/v1/gifs')
-            .set("authorization", "Bearer " + token)
-            .send(
-                {
-                    "title": "An image",
-                    "image":  "images/vintage.png"
-                }
-            )
-            .end((err, response) =>{
-                response.body.should.be.a('object');
-                done();
-            })
-        })
-        it('It should not post an image that is invalid', (done)=>{
-            chai.request(server)
-            .post('/v1/gifs')
-            .send(
-                {
-                    "title": "An image",
-                    "image":  "images/vinta"
-                }
-            )
-            .end((err, response) =>{
-                response.should.have.status(401)
-                response.body.should.be.a('object');
-                done();
-            })
-        })
-        
-        })
+   })
 
-        // GIF COMMENT
-        describe('POST /v1/gifs/1/comment',()=>{
-        it('It should post a comment', (done)=>{
+   describe('POST /v1/categories',()=>{
+        it('It should add a category name to the list of categories', (done)=>{
             chai.request(server)
-            .post('/v1/gifs/1/comment')
+            .post('/v1/categories')
             .set('token', token)
             .send(
                 {
-                   "comment": comment
+                    "categoryName": categoryName
                 }
             )
             .end((err, response) =>{
@@ -85,7 +54,38 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
                 done();
             })
         })
+        it('It should not post a categoryName with length greater than 12', (done)=>{
+            chai.request(server)
+            .post('/v1/categories')
+            .set('token', token)
+            .send(
+                {
+                    "categoryName": "lengthybusinesses"
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(400)
+                response.body.should.be.a('object');
+                done();
+            })
         })
+        it('It should not post a categoryName if user has no valid token', (done)=>{
+            chai.request(server)
+            .post('/v1/categories')
+            .send(
+                {
+                    "categoryName": "lengthybusinesses"
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                response.body.should.be.a('object');
+                done();
+            })
+        })
+    })
+
+
 
 
  })

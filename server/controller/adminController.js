@@ -82,7 +82,7 @@ class UserController {
         status: 'success',
         data: {
           message: 'You have succefully log in',
-          token,
+          token: token,
           userid: user.rows[0].id,
         },
       });
