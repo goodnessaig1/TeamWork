@@ -85,6 +85,20 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
                 done();
             })
         })
+        it('It should not post a comment comment if the user has no token', (done)=>{
+            chai.request(server)
+            .post('/v1/gifs/1/comment')
+            .send(
+                {
+                   "comment": comment
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                response.body.should.be.a('object');
+                done();
+            })
+        })
         })
 
 

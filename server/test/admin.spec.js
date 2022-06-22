@@ -92,6 +92,30 @@ describe('ADMIN AND EMPLOYEE CREATE ACCOUNT AND SIGNUP ROUTES',()=>{
                 done();
             })
         })
+
+        it('it should not be able to create a user with a short length of password', (done)=>{
+            chai.request(server)
+            .post('/auth/v1/create-user')
+            .send(
+                {
+                "firstName": "goodness",
+                "lastName": "ose",
+                "email": "goodness@gmailcom",
+                "password": "passs",
+                "gender": "MALE",
+                "jobRole" : "Developer",
+                "department": "Admin",
+                "isAdmin" : true,
+                "address": "No 43 endurance street"
+            }
+            )
+            .end((err, response) =>{
+                response.should.have.status(412)
+                response.body.should.be.a('object');
+                response.body.should.have.property('message').eq('Validation failed');
+                done();
+            })
+        })
     })
   });
 
