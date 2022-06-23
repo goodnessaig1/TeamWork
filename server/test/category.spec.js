@@ -17,6 +17,7 @@ const categoryName = "election"
 let token;
 let isNotAdminToken
 
+
 describe('CREATE A USER ACCOUNT THATS NOT AN ADMIN',()=>{
     // TESTING THE CREATE-ACCOUNT ROUTE
     describe('CHECK IF USER WITH EMAIL ALREADY EXIST',()=>{
