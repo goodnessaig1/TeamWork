@@ -62,6 +62,7 @@ const comment = (req, res, next) => {
         }
     });
 }
+
 const category = (req, res, next) => {
     const validationRule = {
         "categoryName": "required|string|max:12"
@@ -79,9 +80,29 @@ const category = (req, res, next) => {
     });
 }
 
+const article = (req, res, next) => {
+    const validationRule = {
+        "title": "required|string|max:50",
+        "article": "required|string|max:2500"
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(400).json({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
+
+
 module.exports = { 
   signup,
   logIn,
   comment,
-  category
+  category,
+  article
 }
