@@ -127,5 +127,20 @@ describe('POST /v1/flag',()=>{
                 done();
             })
         })
+        it('It should be a boolean else, render an error', (done)=>{
+            chai.request(server)
+            .patch('/v1/articles/1/flag')
+            .send(
+                {
+                    "flagged": "This is a string"
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(400)
+                response.body.should.be.a('object');
+                response.body.should.have.property('success').eq(false);
+                done();
+            })
+        })
     })
 })

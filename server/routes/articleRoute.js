@@ -7,5 +7,5 @@ const validation = require("../middleware/validation");
 router.post('/', authorization, validation.article, controller.createArticle);
 
 
-router.patch('/:articleId/flag',   controller.flagArticles);
+router.patch('/:articleId/flag', validation.flagArticle,  controller.flagArticles);
 module.exports = router;

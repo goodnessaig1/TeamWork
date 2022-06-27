@@ -46,6 +46,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
                 }
             )
             .end((err, response) =>{
+                response.should.have.status(201)
                 response.body.should.be.a('object');
                 done();
             })

@@ -98,11 +98,29 @@ const article = (req, res, next) => {
     });
 }
 
+const flagArticle = (req, res, next) => {
+    const validationRule = {
+        "flagged": "required|boolean"
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(400).json({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
+
 
 module.exports = { 
   signup,
   logIn,
   comment,
   category,
-  article
+  article,
+  flagArticle
 }
