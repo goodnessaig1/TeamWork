@@ -37,10 +37,8 @@ describe('POST ARTICLE ',()=>{
                 done();
             })
         })
-        })
 
     // POST ARTICLE
-    describe('POST /v1/articles',()=>{
         it('It should post an article with a title under a specific category', (done)=>{
             chai.request(server)
             .post('/v1/articles')
@@ -59,8 +57,6 @@ describe('POST ARTICLE ',()=>{
                 done();
             })
         })
-        
-
 
         it('It should not post any article if the categoryId is invalid', (done)=>{
             chai.request(server)
