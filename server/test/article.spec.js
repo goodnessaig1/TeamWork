@@ -13,7 +13,14 @@ chai.use(chaiHttp);
  let token;
 
 describe('POST ARTICLE ',()=>{
-    // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
+     before((done) => {
+      done()
+  })
+ afterEach(async () => {
+    await pool.query('DELETE FROM articles WHERE title =$1',[title]);
+  });
+
+  // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
     describe('POST /auth/v1/login',()=>{
     it('It should login a user with a valid email and password', (done)=>{
             chai.request(server)
@@ -53,9 +60,7 @@ describe('POST ARTICLE ',()=>{
             })
         })
         
- afterEach(async () => {
-    await pool.query('DELETE FROM articles WHERE title =$1',[title]);
-  });
+
 
         it('It should not post any article if the categoryId is invalid', (done)=>{
             chai.request(server)
@@ -93,6 +98,38 @@ describe('POST ARTICLE ',()=>{
             })
         })      
     })
-
-
+    
+//  THIS TEST IS TO FLAG ARTICLES MARKED AS INAPPROPRIATE
+describe('POST /v1/flag',()=>{
+        it('It should update a post that is termed inappropriate to true', (done)=>{
+            chai.request(server)
+            .patch('/v1/articles/1/flag')
+            .send(
+                {
+                    "flagged": true
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(200)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('success');
+                done();
+            })
+        })
+        it('It should not update any article which articleId is invalid', (done)=>{
+            chai.request(server)
+            .patch('/v1/articles/123/flag')
+            .send(
+                {
+                    "flagged": true
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(404)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('Failed');
+                done();
+            })
+        })
+    })
 })

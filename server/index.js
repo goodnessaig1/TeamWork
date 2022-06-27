@@ -3,7 +3,6 @@ const users = require('./routes/adminRoute')
 const gifRoutes = require('./routes/gifRoute');
 const categoryRoutes = require('./routes/categoryRoute');
 const articeRoute = require('./routes/articleRoute');
-const flaggedRoute = require('./routes/flaggedRoute');
 
 
 const app = express();
@@ -25,8 +24,6 @@ app.use('/v1/categories', categoryRoutes);
   //  ARTICLE ROUTE
 app.use('/v1/articles', articeRoute);
 
-//    FLAG AN INAPPROPRIATE ARTICLE ROUTE
-app.use("/v1/flag", flaggedRoute)
 
 const port = process.env.PORT || 3000; 
 app.listen(port, ()=>{

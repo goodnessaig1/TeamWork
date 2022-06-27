@@ -1,7 +1,7 @@
 const pool = require("./db");
 
 module.exports = () => {
-  const createCategoryTable = async () => {
+  const createArticleTable = async () => {
     try {
       await pool.query(`CREATE TABLE IF NOT EXISTS 
         articles (
@@ -22,7 +22,7 @@ module.exports = () => {
       console.log(error);
     }
   };
-  createCategoryTable();
+  createArticleTable();
 };
 
 
