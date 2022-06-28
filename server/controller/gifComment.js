@@ -5,10 +5,7 @@ const { DateTime } = require("luxon");
 
 require("dotenv").config();
 
-const getTime = () => {
-	const easternTime = DateTime.local();
-	return easternTime.toLocaleString(DateTime.DATETIME_FULL);
-};
+
 
 
 class gifController {
@@ -18,7 +15,7 @@ class gifController {
       try {
         const { comment } = req.body;
         const { gifId } = req.params;
-        const createdAt = getTime();
+        const createdAt = DateTime.now()
         const userId = req.user.userId;
 
         const gif = await pool.query(`SELECT * FROM gifs WHERE gif_id = $1`,[gifId]);

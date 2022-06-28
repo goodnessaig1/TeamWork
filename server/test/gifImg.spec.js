@@ -38,7 +38,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
         it('It should post an image to cloudinaary and also return the link', (done)=>{
             chai.request(server)
             .post('/v1/gifs')
-            .set('token', token)
+            .set("token", `Bearer ${token}` )
             .send(
                 {
                     "title": "An image",
@@ -54,6 +54,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
         it('It should not post an image that is invalid', (done)=>{
             chai.request(server)
             .post('/v1/gifs')
+            .set("token", `Bearer ${token}` )
             .send(
                 {
                     "title": "An image",
@@ -61,7 +62,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
                 }
             )
             .end((err, response) =>{
-                response.should.have.status(401)
+                response.should.have.status(500)
                 response.body.should.be.a('object');
                 done();
             })
@@ -74,7 +75,8 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
         it('It should post a comment', (done)=>{
             chai.request(server)
             .post('/v1/gifs/1/comment')
-            .set('token', token)
+            // .set('token', token)
+            .set("token", `Bearer ${token}` )
             .send(
                 {
                    "comment": comment
@@ -95,7 +97,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
                 }
             )
             .end((err, response) =>{
-                response.should.have.status(401)
+                response.should.have.status(400)
                 response.body.should.be.a('object');
                 done();
             })

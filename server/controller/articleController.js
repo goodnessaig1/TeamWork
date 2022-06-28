@@ -6,10 +6,6 @@ const { DateTime } = require("luxon");
 require('../models/articleModel')();
 require("dotenv").config();
 
-const getTime = () => {
-	const easternTime = DateTime.local();
-	return easternTime.toLocaleString(DateTime.DATETIME_FULL);
-};
 
 class ArticleController {
   static async createArticle(req, res) {
@@ -25,8 +21,8 @@ class ArticleController {
       });
     }
 
-    const createdAt = getTime();
-    const updatedAt = getTime();
+    const createdAt = DateTime.now() 
+    const updatedAt = DateTime.now() 
 
     const { userId } = req.user;
     const values = [title, article, createdAt,updatedAt, categoryId, userId]
@@ -69,7 +65,7 @@ class ArticleController {
                     message: 'Not provided'
                 })
             }
-            const flaggedAt = getTime();
+            const flaggedAt = DateTime.now() 
             const flaged = await pool.query(queries.flag,  [flagged, flaggedAt, articleId])
               return res.status(200).json({
                   status: 'success',
