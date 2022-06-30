@@ -11,7 +11,7 @@ chai.should();
 
 chai.use(chaiHttp);
  let token;
-
+let articleId;
 describe('POST ARTICLE ',()=>{
      before((done) => {
       done()
@@ -45,7 +45,7 @@ describe('POST ARTICLE ',()=>{
             .set("token", `Bearer ${token}` )
             .send(
                 {
-                   "title": title,
+                   "title": "Elections in Nigeria",
                    "article": "This article is all about politics",
                    "categoryId": "4"
                 }
@@ -54,6 +54,7 @@ describe('POST ARTICLE ',()=>{
                 response.should.have.status(201)
                 response.body.should.be.a('object');
                 response.body.should.have.property('status').eq('success');
+                articleId = response.body.data.articleId;
                 done();
             })
         })
@@ -93,8 +94,156 @@ describe('POST ARTICLE ',()=>{
                 done();
             })
         })      
+   
+         // UPDATE | EDIT AN ARTICLE
+        it('It should  update an article if the user has a valid token and also a valid article id', (done)=>{
+            chai.request(server)
+            .patch('/v1/articles/35')
+            .set("token", `Bearer ${token}` )
+            .send(
+                {
+                   "title": "NIGERIA ELECTION 2023",
+                   "article": "This is the updated  article that  is all about politics"
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(201)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('success');
+                done();
+            })
+        })
+        it('it should return failed if the article id does not exist', (done)=>{
+            chai.request(server)
+            .patch('/v1/articles/223')
+            .set("token", `Bearer ${token}` )
+            .send(
+                {
+                   "title": "NIGERIA ELECTION 2023",
+                   "article": "This is the updated  article that  is all about politics"
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(404)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('Failed');
+                done();
+            })
+        })
+        it('it should return Invalid token if theres no token provided', (done)=>{
+            chai.request(server)
+            .patch('/v1/articles/35')
+            .set("token", `Bearer` )
+            .send(
+                {
+                   "title": "NIGERIA ELECTION 2023",
+                   "article": "This is the updated  article that  is all about politics"
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                done();
+            })
+        })
+
+        // EMPLOYEES CAN GET ALL ARTILES POSTED
+        it('It should be able to get all articles posted', (done)=>{
+            chai.request(server)
+            .get('/v1/articles')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(200)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('Success');
+                done();
+            })
+        })
+
+        it('It should not be able to get any article if the user has no token', (done)=>{
+            chai.request(server)
+            .get('/v1/articles')
+            .set("token", `Bearer` )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                done();
+            })
+        })
+        
+        // EMPLOYEES CAN GET A SINGLE ARTILE POSTED
+        it('It should be able to get a single article article posted', (done)=>{
+            chai.request(server)
+            .get('/v1/articles/35')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(200)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('success');
+                done();
+            })
+        })
+
+        it('It should be able to get any article posted if the article with that id does not exist', (done)=>{
+            chai.request(server)
+            .get('/v1/articles/4')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(404)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('Failed');
+                done();
+            })
+        })
+
+        it('It should not be able to get any article if the user has no valid token', (done)=>{
+            chai.request(server)
+            .get('/v1/articles/35')
+            .set("token", `Bearer` )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                done();
+            })
+        })
+       
+        // EMPLOYEES CAN DELETE  A SINGLE ARTILE POSTED
+        it('It should be able to delete a single article the user posted', (done)=>{
+            chai.request(server)
+            .delete(`/v1/articles/${articleId}`)
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(202)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('success');
+                done();
+            })
+        })
+
+        it('It should not be able to delete any article if the articleId is invalid', (done)=>{
+            chai.request(server)
+            .delete('/v1/articles/4')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(404)
+                response.body.should.be.a('object');
+                response.body.should.have.property('message').eq('Article Not Found');
+                done();
+            })
+        })
+
+        it('It should not be able to delete an article that was not posted my the user', (done)=>{
+            chai.request(server)
+            .delete('/v1/articles/58')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(403)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('Failed');
+                done();
+            })
+        })
     })
-    
+
+   
+
 //  THIS TEST IS TO FLAG ARTICLES MARKED AS INAPPROPRIATE
 describe('POST /v1/flag',()=>{
         it('It should update a post that is termed inappropriate to true', (done)=>{

@@ -8,6 +8,7 @@ require("dotenv").config();
 
 
 class ArticleController {
+
   static async createArticle(req, res) {
       try {
           const { title, article, categoryId } = req.body;
@@ -80,6 +81,108 @@ class ArticleController {
       })
     }
   }
+
+  static async updateArticle(req, res) {
+    try {
+      const { articleId } = req.params;
+      const { title, article } = req.body;
+      const user = await pool.query(queries.selectArticle,[articleId]);
+
+        if (user.rowCount === 0) return res.status(404).json({ 
+            status: 'Failed',
+            message: 'Article Not Found'
+        });
+        
+        const updatedAt = DateTime.now()
+        const updated = await pool.query(queries.updateArticle,[title, article, updatedAt, articleId]);
+
+      return res.status(201).json({
+          status: 'success',
+          data: {
+            message: 'Article successfully updated',
+            title: updated.rows[0].title,
+            article: updated.rows[0].article,
+            updatedAt: updatedAt
+          },
+        });
+    } catch (err) {
+         res.status(500).send({
+          message:'Server Error',
+          error: err.message 
+      })
+    }
+  }
+
+
+  static async getAllArticles(req, res) {
+    try {
+      const articles = await pool.query(queries.getAllArticles);
+        return res.status(200).json({
+          status: 'Success',
+          data: articles.rows,
+        });
+      } catch (err) {
+        res.status(500).send({
+          message:'Server Error',
+          error: err.message
+      })
+      }
+  }
+
+
+
+  static async getSingleArticle(req, res) {
+    try {
+      const { articleId } = req.params;
+      const article = await pool.query(queries.getSingleArticle,[articleId]);
+      if (article.rows.length === 0) {
+        return res.status(404).json({
+          status: 'Failed',
+          error: 'Article with the specified articleId NOT found',
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: article.rows[0],
+      });
+    } catch (err) {
+      res.status(500).send({
+          message:'Server Error',
+          error: err.message
+      })
+    }
+  }
+
+
+  static async deleteSingleArticle(req, res) {
+    try {
+      const { articleId } = req.params;
+
+    const user = await pool.query(queries.selectArticle, [articleId]);
+    if (user.rowCount === 0) return res.status(404).json({ message: 'Article Not Found' });
+      if (user.rows[0].user_id !== req.user.userId) {
+        return res.status(403).json({
+          status: 'Failed',
+          message: 'You cannot delete this article',
+        });
+    }
+
+      await pool.query(queries.deleteSingleArticle, [articleId]);
+      return res.status(202).json({
+        status: 'success',
+        data: {
+          message: 'Article succesfully deleted',
+        },
+    });
+    } catch (err) {
+      res.status(500).send({
+          message:'Server Error',
+          error: err.message
+      })
+    }
+  }
+
+
 }
 
 module.exports = ArticleController;

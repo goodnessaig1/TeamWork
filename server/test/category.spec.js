@@ -151,13 +151,14 @@ describe('ADMIN CAN ADD CATEGORIES WHICH USERS CAN USE TO DETERMINE THE FIELD TH
         it('It should not post a categoryName if user has no valid token', (done)=>{
             chai.request(server)
             .post('/v1/categories')
+            .set("token", `Bearer` )
             .send(
                 {
                     "categoryName": "lengthybusinesses"
                 }
             )
             .end((err, response) =>{
-                response.should.have.status(400)
+                response.should.have.status(401)
                 response.body.should.be.a('object');
                 done();
             })
