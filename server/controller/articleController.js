@@ -154,6 +154,7 @@ class ArticleController {
   }
 
 
+  
   static async deleteSingleArticle(req, res) {
     try {
       const { articleId } = req.params;
