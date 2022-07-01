@@ -12,13 +12,16 @@ chai.should();
 chai.use(chaiHttp);
  let token;
 let articleId;
+ const comment = "The current state of nigerian politics is becoming something else. And 2023 is the general election. we just pray it ends well ."
 describe('POST ARTICLE ',()=>{
      before((done) => {
       done()
   })
  afterEach(async () => {
     await pool.query('DELETE FROM articles WHERE title =$1',[title]);
-  });
+
+    await pool.query('DELETE FROM articles_comments WHERE comment =$1',[comment]);
+});
 
   // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
     describe('POST /auth/v1/login',()=>{
@@ -292,4 +295,94 @@ describe('POST /v1/flag',()=>{
             })
         })
     })
+
+   
+    //    ARTICLE COMMENT
+    describe('POST A COMMENT ON AN ARTICLE /v1/articles/:articleId/comment',()=>{
+        it('It should post a comment to a particular article if the user provides an articleId', (done)=>{
+            chai.request(server)
+            .post('/v1/articles/1/comment')
+            .set("token", `Bearer ${token}` )
+            .send(
+                {
+                    "comment": comment
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(201)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('success');
+                done();
+            })
+        })
+        
+        it('It should not post any comment if the article id does not exist', (done)=>{
+            chai.request(server)
+            .post('/v1/articles/1345/comment')
+            .set("token", `Bearer ${token}` )
+            .send(
+                {
+                    "comment": comment
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(404)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('Failed');
+                done();
+            })
+        })
+        
+        it('It should not post any comment if the user dosent have a vaild token', (done)=>{
+            chai.request(server)
+            .post('/v1/articles/1/comment')
+            .set("token", `Bearer` )
+            .send(
+                {
+                    "comment": comment
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                done();
+            })
+        })
+
+        it('It should not post a comment if the length is longer than 180', (done)=>{
+            chai.request(server)
+            .post('/v1/articles/1/comment')
+            .set("token", `Bearer ${token}` )
+            .send(
+                {
+                    "comment": 
+                        `Elections in Nigeria are forms of choosing representatives to the Federal Government of Nigeria and the various states in the fourth
+                         republic Nigeria.[1] Elections in Nigeria started since 1959 with different political parties. It's a method of choosing leaders where
+                          the citizens has right to vote and to be voted for.
+                         Nigerians elects on the federal level a head of state (the President of Nigeria) and a legislature (the National Assembly). The president is elected 
+                         by the people. The National Assembly has two chambers. The House of Representatives has 360 members, elected for a four-year term in single-seat constituencies. 
+                         The Senate has 109 members, elected for a four-year term: each of the 36 states are divided into 3 senatorial districts, each of which is represented by one senator;
+                          the Federal Capital Territory is represented by only one senator.[3][4]
+                         Nigeria has a multi-party system, with two or three strong parties and a third party that is electorally successful. However, members of the People's 
+                         Democratic Party (PDP) had controlled the presidency since elections were resumed in 1999 until 2015 when Muhammadu Buhari won the presidential election.[5]
+                         The Nigerian general elections of 2007 were held on 14 April and 21 April 2007.[6] Governorship and state assembly elections were held on 14 April, while the 
+                         presidential and national assembly elections were held a week later on 21 April. late Umaru Yar'Adua won the highly controversial election for the ruling People's Democratic Party
+                          (PDP) and was sworn in on 29 May.
+                        The ruling PDP won 26 of the 32 states, according to INEC, including Kaduna State and Katsina State, where the results were contested by the local population.[7]
+
+                        Following the presidential election, groups monitoring the election gave it a dismal assessment. Chief European Union observer Max van den Berg reported that the handling
+                         of the polls had "fallen far short" of basic international standards, and that "the process cannot be considered to be credible."[8] A spokesman for the United States Department 
+                         of State said it was "deeply troubled" by election polls, calling them "flawed", and said it hoped the political parties would resolve any differences over the election through peaceful, constitutional means.[9]
+                        `
+                }
+            )
+            .end((err, response) =>{
+                response.should.have.status(400)
+                response.body.should.have.property('success').eq(false);
+                done();
+           })
+        })
+    })
+
+
+
 })

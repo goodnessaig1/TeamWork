@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const controller = require('../controller/articleController');
+const articleController = require('../controller/articleComment');
 const authorization = require('../middleware/authorization');
 const validation = require("../middleware/validation");
 
@@ -17,6 +18,11 @@ router.delete('/:articleId', authorization, controller.deleteSingleArticle);
 
 //  FLAG AN INAPPROPRIATE ARTRICLE ROUTE
 router.patch('/:articleId/flag', validation.flagArticle,  controller.flagArticles);
+
+
+// ARTICLE COMMENT ROUTE
+router.post('/:articleId/comment', authorization, validation.articleComment, articleController.createComment)
+
 
 
 module.exports = router;

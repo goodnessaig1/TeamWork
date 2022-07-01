@@ -115,6 +115,23 @@ const flagArticle = (req, res, next) => {
     });
 }
 
+const articleComment = (req, res, next) => {
+    const validationRule = {
+        "comment": "required|string|max:180"
+    }
+    validator(req.body, validationRule, {}, (err, status) => {
+        if (!status) {
+            res.status(400).json({
+                    success: false,
+                    message: 'Validation failed',
+                    data: err
+                });
+        } else {
+            next();
+        }
+    });
+}
+
 
 module.exports = { 
   signup,
@@ -122,5 +139,6 @@ module.exports = {
   comment,
   category,
   article,
-  flagArticle
+  flagArticle,
+  articleComment
 }
