@@ -10,8 +10,11 @@ const authorization = (req, res, next) => {
     const decodedPayload = jwt.verify(token, 'jwtPrivateKey');
     req.user = decodedPayload;
     next();
-  } catch (ex) {
-    res.status(400).send('Invalid token.');
+  } catch (err) {
+    res.status(400).send({
+      message: 'Invalid token.',
+      error: err.message
+    });
   }
 };  
 }

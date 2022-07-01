@@ -94,14 +94,14 @@ class ArticleController {
         });
         
         const updatedAt = DateTime.now()
-        const updated = await pool.query(queries.updateArticle,[title, article, updatedAt, articleId]);
+        const updatedArticle = await pool.query(queries.updateArticle,[title, article, updatedAt, articleId]);
 
       return res.status(201).json({
           status: 'success',
           data: {
             message: 'Article successfully updated',
-            title: updated.rows[0].title,
-            article: updated.rows[0].article,
+            title: updatedArticle.rows[0].title,
+            article: updatedArticle.rows[0].article,
             updatedAt: updatedAt
           },
         });
