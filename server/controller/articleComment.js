@@ -23,13 +23,7 @@ class ArticleCommentController {
           });
         }
 
-        const userNames = await pool.query(`SELECT * FROM users WHERE id = $1`,[userId]);
-
-        const firstName = userNames.rows[0].first_name;
-        const lastName = userNames.rows[0].last_name;
-        
-        const userName = firstName.replace(/\b\w/g, c => c. toUpperCase()) + " " + lastName.replace(/\b\w/g, c => c. toUpperCase())
-        const values = [ comment, createdAt, articleId, flagged, userId, userName ]
+        const values = [ comment, createdAt, articleId, flagged, userId,  ]
 
         const articleComment = await pool.query(queries.createComment, values );
         return res.status(201).json({
@@ -40,7 +34,6 @@ class ArticleCommentController {
             articleTitle: article.rows[0].title,
             article: article.rows[0].article,
             comment: comment,
-            userName: userName,
             commentId: articleComment.rows[0].comment_id
           },
         });

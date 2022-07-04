@@ -17,7 +17,7 @@ const deleteSingleArticle = `DELETE FROM articles WHERE article_id = $1`
 
 
 // ARTCLE COMMENT QUERY
-const createComment = "INSERT INTO articles_comments (comment, created_at, article_id, flagged, user_id, user_name ) VALUES ($1, $2, $3, $4, $5, $6)RETURNING * "
+const createComment = "INSERT INTO articles_comments (comment, created_at, article_id, flagged, user_id) VALUES ($1, $2, $3, $4, $5)RETURNING * "
 
 
 module.exports = {
