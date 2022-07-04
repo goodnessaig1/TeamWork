@@ -110,7 +110,7 @@ class GifController {
   static async getSingleGif(req, res) {
     try {
         const { gifId } = req.params;
-        const gif = await pool.query(`SELECT * FROM gifs WHERE gif_id = ${gifId}`);
+        const gif = await pool.query(queries.selectGif, [gifId]);
         if (gif.rows.length === 0) {
           return res.status(404).json({
             status: 'Failed',
