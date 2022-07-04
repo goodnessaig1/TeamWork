@@ -8,6 +8,12 @@ const validation = require("../middleware/validation");
 //   GIF ROUTES FOR UPLOADING
 router.post('/',authorization, controller.createGif );
 
+router.get('/',authorization, controller.getAllgifs );
+
+router.get('/:gifId',authorization, controller.getSingleGif );
+
+router.delete('/:gifId',authorization, controller.deleteGif );
+
 //  GIF COMMENT ROUTES
 router.post('/:gifId/comment',authorization, validation.comment, commentController.createComment)
 

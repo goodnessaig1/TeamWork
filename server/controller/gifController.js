@@ -53,6 +53,81 @@ class GifController {
 
     }
 
+    static async deleteGif(req, res) {
+      try {
+         const { gifId } = req.params;
+
+        const gif = await pool.query(queries.selectGif,[gifId]);
+        if (gif.rows.length === 0) {
+          return res.status(404).json({
+            status: 'Failed',
+            error: 'Gif with the specified gifId NOT found',
+          });
+        }
+
+        if (gif.rows[0].user_id !== req.user.userId) {
+          return res.status(403).json({
+            status: 'error',
+            message: 'You cannot delete this Gif',
+          });
+        }
+
+        await cloudinary.uploader.destroy(gif.rows[0].public_id);
+
+
+        await pool.query(queries.deleteGif, [gifId]);
+        if (gif.rowCount === 0) return res.status(404).json({ message: 'Gif Not Found' });
+        return res.status(202).json({
+          status: 'success',
+          data: {
+            message: 'Gif post successfully deleted',
+          },
+        });
+      } catch (err) {
+        res.status(500).send({
+        message:'Server Error',
+        error: err.message
+      });
+      }
+  }
+
+    static async getAllgifs(req, res) {
+      try {
+        const gifs = await pool.query(queries.selectAllGifs);
+        res.status(200).json({
+          status: 'success',
+          data: gifs.rows,
+    });
+      } catch (err) {
+        res.status(500).send({
+        message:'Server Error',
+        error: err.message
+      });
+      }
+  }
+
+
+  static async getSingleGif(req, res) {
+    try {
+        const { gifId } = req.params;
+        const gif = await pool.query(`SELECT * FROM gifs WHERE gif_id = ${gifId}`);
+        if (gif.rows.length === 0) {
+          return res.status(404).json({
+            status: 'Failed',
+            error: 'Gif with the specified gifId NOT found',
+          });
+        }
+        return res.status(200).json({
+          status: 'success',
+          data: gif.rows[0],
+        });
+    } catch (err) {
+        res.status(500).send({
+          message:'Server Error',
+          error: err.message
+        });
+     }
+  }
 
 
 }

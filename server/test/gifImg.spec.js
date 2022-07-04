@@ -14,6 +14,7 @@ chai.should();
 
 chai.use(chaiHttp);
  let token;
+ let gifId;
 
 describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
     // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
@@ -48,6 +49,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
             .end((err, response) =>{
                 response.should.have.status(201)
                 response.body.should.be.a('object');
+                gifId = response.body.data.images.gif_id
                 done();
             })
         })
@@ -67,15 +69,82 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
                 done();
             })
         })
+
+        // EMPLOYEES CAN GET ALL GIFS POSTED
+        it('It should be able to get all gifs posted', (done)=>{
+            chai.request(server)
+            .get('/v1/gifs')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(200)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('success');
+                done();
+            })
+        })
+
+        it('It should not be able to get any gif if the user has no token', (done)=>{
+            chai.request(server)
+            .get('/v1/gifs')
+            .set("token", `Bearer` )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                done();
+            })
+        })
+        
+        // EMPLOYEES CAN GET A SINGLE GIF POSTED
+        it('It should be able to get a single  artigifcle posted', (done)=>{
+            chai.request(server)
+            .get('/v1/gifs/3')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(200)
+                response.body.should.be.a('object');
+                response.body.should.have.property('status').eq('success');
+                done();
+            })
+        })
+
+        it('It should not be able to get any gif posted if the gif with that id does not exist', (done)=>{
+            chai.request(server)
+            .get('/v1/gif/1')
+            .set("token", `Bearer ${token}` )
+            .end((err, response) =>{
+                response.should.have.status(404)
+                response.body.should.be.a('object');
+                done();
+            })
+        })
+
+        it('It should not be able to get any gif if the user has no valid token', (done)=>{
+            chai.request(server)
+            .get('/v1/gifs/3')
+            .set("token", `Bearer` )
+            .end((err, response) =>{
+                response.should.have.status(401)
+                done();
+            })
+        })
+       
+       
+        it('It should delete a particular gif if the gifId is provided', (done)=>{
+            chai.request(server)
+            .delete(`/v1/gifs/${gifId}`)
+            .set("token", `Bearer ${token}`)
+            .end((err, response) =>{
+                response.should.have.status(202)
+                done();
+            })
+        })
         
         })
 
         // GIF COMMENT
-        describe('POST /v1/gifs/1/comment',()=>{
+        describe('POST /v1/gifs/3/comment',()=>{
         it('It should post a comment', (done)=>{
             chai.request(server)
-            .post('/v1/gifs/1/comment')
-            // .set('token', token)
+            .post(`/v1/gifs/3/comment`)
             .set("token", `Bearer ${token}` )
             .send(
                 {
