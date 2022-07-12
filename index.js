@@ -7,6 +7,8 @@ const articeRoute = require('./server/routes/articleRoute');
 const app = express();
 const cors = require('cors');
 
+// ======== SWAGGER DOCUMENTATION ROUTE
+
 const swaggerUi = require('swagger-ui-express');
 
 const swaggerSpec = require('./server/swagger/swagger');
