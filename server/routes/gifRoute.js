@@ -1,11 +1,24 @@
-const router = require("express").Router()
+const router = require('express').Router();
 const controller = require('../controller/gifController');
-const authorization = require("../middleware/authorization");
+const commentController = require('../controller/gifComment');
+const authorization = require('../middleware/authorization');
+const validation = require('../middleware/validation');
 
+//   GIF ROUTES FOR UPLOADING
+router.post('/', authorization, controller.createGif);
 
+router.get('/', authorization, controller.getAllgifs);
 
-router.post('/', authorization, controller.createGif );
+router.get('/:gifId', authorization, controller.getSingleGif);
 
+router.delete('/:gifId', authorization, controller.deleteGif);
 
+//  GIF COMMENT ROUTES
+router.post(
+  '/:gifId/comment',
+  authorization,
+  validation.comment,
+  commentController.createComment
+);
 
-module.exports =  router
+module.exports = router;

@@ -1,90 +1,116 @@
+/* eslint-disable consistent-return */
 const bcrypt = require('bcrypt');
-const db = require('../db');
-const jwtGenerator = require('../utils/jwtGenerator');
+const pool = require('../models/db');
 const queries = require('../queries/adminQuery');
-const jwt = require('jsonwebtoken')
+const { createToken } = require('../utils/jwtGenerator');
 
- 
-// ADMIN AND EMPLOYEE REGISTER
+class UserController {
+  // ADMIN AND EMPLOYEE REGISTER
 
-const register = async(req, res)=>{
+  static async register(req, res) {
     try {
-        const { firstname,lastname,email,password,gender,jobRole, department,isAdmin, address } = req.body;
-db.pool.connect((err, client, done) => {
+      const {
+        firstName,
+        lastName,
+        email,
+        password,
+        gender,
+        jobRole,
+        department,
+        isAdmin,
+        address,
+      } = req.body;
 
-    client.query(queries.createNewUser, [firstname, lastname, email, bcryptPassword,gender,jobRole,department, isAdmin,address], (error, data) => {
-        done();
-         const token = jwtGenerator(data.rows[0].id);
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const bcryptPassword = await bcrypt.hash(password, salt);
 
-        if (error) {
-          res.status(400).json({ error });
-        } else {
-           res.status(201).json({ status: "success", data: {
-             message: "User account successfully created",
-             "token": token,
-             "userId": data.rows[0].id
-         }  }) 
-        }
-      });
-      });
-  
-         const saltRounds = 10;
-         const salt = await bcrypt.genSalt(saltRounds);
-         const bcryptPassword = await bcrypt.hash(password, salt);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send("Server Error");
-    }
-};
-
-
-
-//  LOGIN ROUTE
-const loginUser = async  (req, res) => {
-  try {
-      const data = {
-    email: req.body.email,
-    password: req.body.password,
-  };
-
-  db.pool.connect((err, client, done) => {
-    const value = [data.email];
-
-    client.query(queries.logInUser, value, (error, user) => {
-      done();
-
-      if (user.rows < 1) {
+      const createdAt = new Date();
+      const updatedAt = new Date();
+      let user = await pool.query(queries.checkIfUserExist, [
+        email.toLowerCase(),
+      ]);
+      if (user.rowCount > 0) {
         return res.status(401).json({
-          message: 'Please check your Email and Password',
-          error,
+          status: 'Failed',
+          message: 'User with this email already exist',
         });
       }
+      user = await pool.query(queries.createNewUser, [
+        firstName,
+        lastName,
+        email.toLowerCase(),
+        bcryptPassword,
+        gender,
+        jobRole,
+        department,
+        isAdmin,
+        address,
+        createdAt,
+        updatedAt,
+      ]);
 
-       const validPassword = bcrypt.compare(data.password, user.rows[0].password);
-        if(!validPassword){
-            return res.status(401).json
-            ({message: "Password Or Email is Incorrect"})
-        }
-
-      const token = jwt.sign({
+      const token = createToken({
+        email: user.rows[0].email,
+        userId: user.rows[0].id,
+      });
+      res.status(201).json({
+        status: 'success',
+        data: {
+          message: 'User account successfully created',
+          token,
           userId: user.rows[0].id,
-          email: user.rows[0].email,
-    }, 'jwtPrivateKey');
-      return res.json({ status: "success", data: {
-            message: "You have succefully log in",
-            "token": token,
-            "userid": user.rows[0].id
-        }  })
-    });
-  });
-  }catch (err) {
-         console.error(err.message);
-        res.status(500).send("Server Error");
+          createdAt: user.rows[0].created_at,
+          updatedAt: user.rows[0].updated_at,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
     }
+  }
+
+  //  LOGIN ROUTE
+
+  static async loginUser(req, res) {
+    try {
+      const { email, password } = req.body;
+      // eslint-disable-next-line prettier/prettier
+      const user = await pool.query(queries.logInUser, [email.toLowerCase()]);
+      if (user.rows.length === 0) {
+        return res
+          .status(401)
+          .json({ status: 'Failed', message: 'password or email incorrect' });
+      }
+      const validPassword = await bcrypt.compare(
+        password,
+        user.rows[0].password
+      );
+      if (!validPassword) {
+        return res.status(401).json('Password Or Email is Incorrect');
+      }
+
+      const token = createToken({
+        email: user.rows[0].email,
+        userId: user.rows[0].id,
+      });
+      res.json({
+        status: 'success',
+        data: {
+          message: 'You have succefully log in',
+          token: token,
+          userid: user.rows[0].id,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
 }
 
-
-module.exports = {
-    register,
-    loginUser
-};
+module.exports = UserController;

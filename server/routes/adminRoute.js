@@ -1,10 +1,8 @@
-const router = require("express").Router()
-const validInfo = require("../middleware/validInfo");
+const router = require('express').Router();
 const controller = require('../controller/adminController');
+const validation = require('../middleware/validation');
 
+router.post('/create-user', validation.signup, controller.register);
+router.post('/signin', validation.logIn, controller.loginUser);
 
-router.post('/create-user', validInfo ,controller.register);
-router.post('/login' ,validInfo, controller.loginUser);
-
-
-module.exports =  router
+module.exports = router;

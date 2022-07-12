@@ -1,13 +1,15 @@
 /* eslint-disable no-undef */
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+ const createToken = (data) => {
+  const token = jwt.sign(data,
+     'jwtPrivateKey',
+     { expiresIn: '1h' });
 
-function jwtGenerator(id){
-    const payload = {
-        user: id
-    }
+  return token;
+};
 
-   return jwt.sign(payload, process.env.SUPERSEC)
+
+
+module.exports = {
+    createToken
 }
-
-module.exports = jwtGenerator
