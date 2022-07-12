@@ -7,7 +7,7 @@
 // const app = express();
 // const cors = require('cors');
 
-//  initial testing route
+//  initial testing route with swagger
 
 // const swaggerJSDoc = require('swagger-jsdoc');
 // const swaggerUi = require('swagger-ui-express');
