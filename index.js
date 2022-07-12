@@ -1,15 +1,15 @@
 const express = require('express');
-const users = require('./routes/adminRoute');
-const gifRoutes = require('./routes/gifRoute');
-const categoryRoutes = require('./routes/categoryRoute');
-const articeRoute = require('./routes/articleRoute');
+const users = require('./server/routes/adminRoute');
+const gifRoutes = require('./server/routes/gifRoute');
+const categoryRoutes = require('./server/routes/categoryRoute');
+const articeRoute = require('./server/routes/articleRoute');
 
 const app = express();
 const cors = require('cors');
 
 const swaggerUi = require('swagger-ui-express');
 
-const swaggerSpec = require('./swagger/swagger');
+const swaggerSpec = require('./server/swagger/swagger');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, resp) => {

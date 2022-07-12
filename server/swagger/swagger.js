@@ -28,7 +28,7 @@ const options = {
       scheme: 'bearer',
     },
   },
-  apis: ['./swagger/index.js'],
+  apis: ['./server/swagger/index.js'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
