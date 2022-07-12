@@ -7,6 +7,8 @@
 // const app = express();
 // const cors = require('cors');
 
+//  initial testing route
+
 // const swaggerJSDoc = require('swagger-jsdoc');
 // const swaggerUi = require('swagger-ui-express');
 // const authorization = require('./middleware/authorization');
