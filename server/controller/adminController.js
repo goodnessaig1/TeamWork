@@ -4,18 +4,22 @@ const pool = require('../models/db');
 const queries = require('../queries/adminQuery');
 const { createToken } = require('../utils/jwtGenerator');
 
-
-
 class UserController {
-
-
-// ADMIN AND EMPLOYEE REGISTER
+  // ADMIN AND EMPLOYEE REGISTER
 
   static async register(req, res) {
     try {
-
       const {
-        firstName, lastName, email, password, gender, jobRole, department, isAdmin,address,} = req.body;
+        firstName,
+        lastName,
+        email,
+        password,
+        gender,
+        jobRole,
+        department,
+        isAdmin,
+        address,
+      } = req.body;
 
       const saltRounds = 10;
       const salt = await bcrypt.genSalt(saltRounds);
@@ -23,14 +27,27 @@ class UserController {
 
       const createdAt = new Date();
       const updatedAt = new Date();
-      let user = await pool.query(queries.checkIfUserExist, [email.toLowerCase()]);
+      let user = await pool.query(queries.checkIfUserExist, [
+        email.toLowerCase(),
+      ]);
       if (user.rowCount > 0) {
         return res.status(401).json({
           status: 'Failed',
-            message: 'User with this email already exist'
+          message: 'User with this email already exist',
         });
       }
-      user = await pool.query(queries.createNewUser, [firstName, lastName, email.toLowerCase(), bcryptPassword, gender, jobRole, department, isAdmin,address, createdAt, updatedAt,
+      user = await pool.query(queries.createNewUser, [
+        firstName,
+        lastName,
+        email.toLowerCase(),
+        bcryptPassword,
+        gender,
+        jobRole,
+        department,
+        isAdmin,
+        address,
+        createdAt,
+        updatedAt,
       ]);
 
       const token = createToken({
@@ -49,10 +66,9 @@ class UserController {
       });
     } catch (err) {
       res.status(500).send({
-        message:'Server Error',
-        error: err.message
-      })
-      
+        message: 'Server Error',
+        error: err.message,
+      });
     }
   }
 
@@ -62,9 +78,11 @@ class UserController {
     try {
       const { email, password } = req.body;
       // eslint-disable-next-line prettier/prettier
-        const user = await pool.query(queries.logInUser, [ email.toLowerCase()])
+      const user = await pool.query(queries.logInUser, [email.toLowerCase()]);
       if (user.rows.length === 0) {
-        return res.status(401).json({ status: 'Failed', message: 'password or email incorrect' });
+        return res
+          .status(401)
+          .json({ status: 'Failed', message: 'password or email incorrect' });
       }
       const validPassword = await bcrypt.compare(
         password,
@@ -88,9 +106,9 @@ class UserController {
       });
     } catch (err) {
       res.status(500).send({
-        message:'Server Error',
-        error: err.message
-      })
+        message: 'Server Error',
+        error: err.message,
+      });
     }
   }
 }

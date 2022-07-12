@@ -18,10 +18,10 @@ chai.use(chaiHttp);
 
 describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
     // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
-    describe('POST /auth/v1/login',()=>{
+    describe('POST /auth/v1/signin',()=>{
     it('It should login a user with a valid email and password', (done)=>{
             chai.request(server)
-            .post('/auth/v1/login')
+            .post('/auth/v1/signin')
             .set('Accept', 'application/json')
             .send(
                 {
@@ -49,7 +49,7 @@ describe('GIF UPLOAD IMAGE TO CLOUDINARY ',()=>{
             .end((err, response) =>{
                 response.should.have.status(201)
                 response.body.should.be.a('object');
-                gifId = response.body.data.images.gif_id
+                gifId = response.body.data.gifId
                 done();
             })
         })

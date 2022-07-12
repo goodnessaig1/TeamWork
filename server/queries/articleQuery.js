@@ -12,12 +12,11 @@ const updateArticle = "UPDATE articles SET title = $1, article = $2, updated_at 
 const getAllArticles =`SELECT article_id, title,user_id, article, first_name as username, category_id, articles.created_at, articles.updated_at, category_id, flagged, flagged_at FROM articles INNER JOIN users ON articles.user_id = users.id ORDER BY updated_at DESC`
 // GET ALL ARTICLES
 const getSingleArticle = `SELECT * FROM articles WHERE article_id = $1`
+const getArticleComment = "SELECT comment_id as commentId, comment, author_id as authorId FROM articles_comments WHERE article_id = $1"
 // DELETE A PARTICLE ARTICLES
 const deleteSingleArticle = `DELETE FROM articles WHERE article_id = $1`
-
-
 // ARTCLE COMMENT QUERY
-const createComment = "INSERT INTO articles_comments (comment, created_at, article_id, flagged, user_id) VALUES ($1, $2, $3, $4, $5)RETURNING * "
+const createComment = "INSERT INTO articles_comments (comment, created_at, article_id, flagged, author_id) VALUES ($1, $2, $3, $4, $5)RETURNING * "
 
 
 module.exports = {
@@ -28,6 +27,7 @@ module.exports = {
   updateArticle,
   getAllArticles,
   getSingleArticle,
+  getArticleComment,
   deleteSingleArticle,
   createComment
 };

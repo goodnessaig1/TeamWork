@@ -38,10 +38,12 @@ class GifController {
           return  res.status(201).send({
                 status: 'success',
                 data: {
-                  gifId: image.gif_id,
+                  gifId: images.rows[0].gif_id,
                   message: 'GIF image successfully posted',
-                      images: images.rows[0],
-                      imageUrl: image.image_url,
+                  createdAt: images.rows[0].created_at,
+                  title: images.rows[0].title,
+                  imageURL: images.rows[0].image_url,
+                  userId: images.rows[0].user_id
                 }
               });
         }catch (err) {
@@ -111,15 +113,24 @@ class GifController {
     try {
         const { gifId } = req.params;
         const gif = await pool.query(queries.selectGif, [gifId]);
+        const gifComment = await pool.query(queries.getGifComments, [gifId]);
+        
         if (gif.rows.length === 0) {
           return res.status(404).json({
             status: 'Failed',
             error: 'Gif with the specified gifId NOT found',
           });
         }
+      
         return res.status(200).json({
           status: 'success',
-          data: gif.rows[0],
+          data: {
+            id: gif.rows[0].gif_id,
+            createdAt: gif.rows[0].created_at,
+            title: gif.rows[0].title,
+            url: gif.rows[0].image_url,
+            comments: gifComment.rows
+          }
         });
     } catch (err) {
         res.status(500).send({

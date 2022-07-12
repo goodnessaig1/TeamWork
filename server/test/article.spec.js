@@ -24,10 +24,10 @@ describe('POST ARTICLE ',()=>{
 });
 
   // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
-    describe('POST /auth/v1/login',()=>{
+    describe('POST /auth/v1/signin',()=>{
     it('It should login a user with a valid email and password', (done)=>{
             chai.request(server)
-            .post('/auth/v1/login')
+            .post('/auth/v1/signin')
             .set('Accept', 'application/json')
             .send(
                 {

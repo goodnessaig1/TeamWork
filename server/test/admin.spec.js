@@ -124,7 +124,7 @@ describe('ADMIN AND EMPLOYEE CREATE ACCOUNT AND SIGNUP ROUTES',()=>{
 describe('POST /auth/v1/login',()=>{
     it('It should login a user with a valid email and password', (done)=>{
             chai.request(server)
-            .post('/auth/v1/login')
+            .post('/auth/v1/signin')
             .send(
                 {
                 "email": "goodness@gmail.com",
@@ -141,7 +141,7 @@ describe('POST /auth/v1/login',()=>{
     
         it('It should not login a user with an invalid email and password', (done)=>{
             chai.request(server)
-            .post('/auth/v1/login')
+            .post('/auth/v1/signin')
             .send(
                 {
                 "email": "goodness43@gmail.com",

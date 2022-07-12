@@ -54,10 +54,10 @@ describe('CREATE A USER ACCOUNT THATS NOT AN ADMIN',()=>{
         // DELETE THIS USER AFTER CREATION
     });
 
-     describe('POST /auth/v1/login',()=>{
-    it('It should login a user who is not an admin', (done)=>{
+     describe('POST /auth/v1/signin',()=>{
+    it('It should signin a user who is not an admin', (done)=>{
             chai.request(server)
-            .post('/auth/v1/login')
+            .post('/auth/v1/signin')
             .set('Accept', 'application/json')
             .send(
                 {
@@ -94,10 +94,10 @@ describe('CREATE A USER ACCOUNT THATS NOT AN ADMIN',()=>{
   })
 describe('ADMIN CAN ADD CATEGORIES WHICH USERS CAN USE TO DETERMINE THE FIELD THEY WANT OT WRITE AN ARTICLE ON ',()=>{
     // LOGIN FIRST IN ORDER TO GET YOUR VALID TOKEN
-    describe('POST /auth/v1/login',()=>{
-    it('It should login a user with a valid email and password', (done)=>{
+    describe('POST /auth/v1/signin',()=>{
+    it('It should signin a user with a valid email and password', (done)=>{
             chai.request(server)
-            .post('/auth/v1/login')
+            .post('/auth/v1/signin')
             .set('Accept', 'application/json')
             .send(
                 {

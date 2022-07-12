@@ -36,7 +36,7 @@ class ArticleController {
           articleId: articles.rows[0].article_id,
           createdAt,
           title,
-          cagigoryName: category.rows[0].category_name
+          catigoryName: category.rows[0].category_name
         }
     });
        } catch (err) {
@@ -91,8 +91,13 @@ class ArticleController {
         if (user.rowCount === 0) return res.status(404).json({ 
             status: 'Failed',
             message: 'Article Not Found'
+        }); 
+        if (user.rows[0].user_id !== req.user.userId) {
+        return res.status(403).json({
+          status: 'Failed',
+          message: 'You cannot update this article',
         });
-        
+    }
         const updatedAt = DateTime.now()
         const updatedArticle = await pool.query(queries.updateArticle,[title, article, updatedAt, articleId]);
 
@@ -135,6 +140,7 @@ class ArticleController {
     try {
       const { articleId } = req.params;
       const article = await pool.query(queries.getSingleArticle,[articleId]);
+      const comments = await pool.query(queries.getArticleComment, [articleId])
       if (article.rows.length === 0) {
         return res.status(404).json({
           status: 'Failed',
@@ -142,8 +148,14 @@ class ArticleController {
         });
       }
       return res.status(200).json({
-        status: 'success',
-        data: article.rows[0],
+    status: 'success',
+        data: {
+          id: article.rows[0].article_id,
+          createdAt: article.rows[0].created_at,
+          title: article.rows[0].title,
+          article: article.rows[0].article,
+          comments: comments.rows
+        } 
       });
     } catch (err) {
       res.status(500).send({

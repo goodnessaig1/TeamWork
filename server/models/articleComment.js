@@ -9,10 +9,10 @@ module.exports = () => {
                     created_at DATE NOT NULL,
                     article_id INTEGER NOT NULL,
                     flagged BOOLEAN DEFAULT false NULL,
-                    user_id INTEGER NOT NULL,
+                    author_id INTEGER NOT NULL,
                     image_ul CHARACTER VARYING,
                     user_name  CHARACTER VARYING,
-                    FOREIGN KEY (user_id) 
+                    FOREIGN KEY (author_id) 
                     REFERENCES users (id)
                     )`);
     } catch (error) {
