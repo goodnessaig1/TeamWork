@@ -5,7 +5,7 @@ var client = new pg.Client({
   host: 'localhost',
   database: 'team',
   password: 'osemudiame1',
-  port: 5000,
+  port: 5432,
 });
 client.connect(function (err) {
   if (err) {
