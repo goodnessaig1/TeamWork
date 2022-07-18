@@ -1,4 +1,4 @@
-const pool = require("./db");
+const pool = require('./db');
 
 module.exports = () => {
   const createGifsTable = async () => {
@@ -11,7 +11,6 @@ module.exports = () => {
             public_id varchar NOT NULL,
             created_at timestamp with time zone NOT NULL,
             user_id SERIAL NOT NULL,
-            PRIMARY KEY (gif_id),
             FOREIGN KEY (user_id) 
             REFERENCES users (id)
             );

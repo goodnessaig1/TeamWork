@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const pool = require('../models/db');
 const queries = require('../queries/adminQuery');
 const { createToken } = require('../utils/jwtGenerator');
+require('../models/userModel')();
 
 class UserController {
   // ADMIN AND EMPLOYEE REGISTER

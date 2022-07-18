@@ -1,4 +1,4 @@
-const pool = require("./db");
+const pool = require('./db');
 
 module.exports = () => {
   const createArticleTable = async () => {
@@ -16,13 +16,10 @@ module.exports = () => {
         category_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) 
         REFERENCES users (id)
-        )`
-        );
+        )`);
     } catch (error) {
       console.log(error);
     }
   };
   createArticleTable();
 };
-
-
