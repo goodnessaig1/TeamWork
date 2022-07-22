@@ -112,6 +112,21 @@ class UserController {
       });
     }
   }
+
+  static async getAllUsers(req, res) {
+    try {
+      const users = await pool.query(queries.getAllUsers);
+      return res.status(200).json({
+        status: 'Success',
+        data: users.rows,
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
 }
 
 module.exports = UserController;
