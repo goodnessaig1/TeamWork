@@ -4,6 +4,8 @@ const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
 const articeRoute = require('./server/routes/articleRoute');
 
+const http = require('http');
+
 const app = express();
 const cors = require('cors');
 
@@ -34,8 +36,9 @@ app.use('/v1/categories', categoryRoutes);
 //  ARTICLE ROUTE
 app.use('/v1/articles', articeRoute);
 
+const server = http.createServer(app);
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`App is running ${port}`);
 });
 
