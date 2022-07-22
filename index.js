@@ -19,6 +19,12 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/', (req, resp) => {
   resp.send('Welcome to teamwork testing with swagger');
 });
+app.get('/gifs', (req, res) => {
+  res.send({
+    id: 'sasdfadf',
+    img: 'dadfladg9eadf',
+  });
+});
 
 //       MIDDLEWARES
 app.use(express.json());
