@@ -16,10 +16,8 @@ const options = {
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'apiKey',
-          name: 'token',
+          type: 'http',
           scheme: 'bearer',
-          in: 'header',
         },
       },
     },
