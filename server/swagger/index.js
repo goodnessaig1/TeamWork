@@ -276,24 +276,30 @@
  * @swagger
  * /v1/gifs:
  *  post:
- *     security:
- *       - bearerAuth: []
- *     tags:
- *     - Gifs
- *     summary: Post a Gif to the DB
- *     requestBody:
- *      required: true
- *     consumes:
- *     - multipart/form-data
- *     parameters:
- *       - name: file
- *         in: formData   # <-----
- *         description: The uploaded file data
+ *       security:
+ *         - bearerAuth: []
+ *       tags:
+ *       - Gifs
+ *       summary: Post a Gif to the DB
+ *       requestBody:
  *         required: true
- *         type: file     # <-----
- *     responses:
- *       201:
- *         description: "Status Created"
+ *         content:
+ *           multipart/form-data:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 image:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     format: binary
+ *                 title:
+ *                   type: string
+ *       responses:
+ *         201:
+ *           description: "Status Created"
+ *         500:
+ *           description: "Error importing file"
  */
 
 //      DELETE A GIF
