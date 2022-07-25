@@ -1,4 +1,5 @@
 const express = require('express');
+const fileupload = require('express-fileupload');
 const users = require('./server/routes/adminRoute');
 const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
@@ -38,7 +39,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(resolve(__dirname, 'src/public')));
-
+app.use(fileupload({ useTempFiles: true }));
 app.use(express.json());
 app.use(cors());
 

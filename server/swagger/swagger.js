@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://nodejs-teamwork.herokuapp.com',
+        url: 'https://nodejs-teamwork.herokuapp.com/',
       },
     ],
     components: {

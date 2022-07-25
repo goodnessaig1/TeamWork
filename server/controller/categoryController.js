@@ -1,7 +1,7 @@
 const pool = require('../models/db');
 const queries = require('../queries/categoryQuery');
 
-// require('../models/categoryModel')();
+require('../models/categoryModel')();
 
 class categoryController {
   static async createCategory(req, res) {

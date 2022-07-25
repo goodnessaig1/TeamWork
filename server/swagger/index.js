@@ -283,20 +283,17 @@
  *     summary: Post a Gif to the DB
  *     requestBody:
  *      required: true
- *      content:
- *        application/json:
- *           schema:
- *            type: object
- *           example:
- *               image: "server/images/vintage.png"
- *               title: "Vintage T-shirt"
+ *     consumes:
+ *     - multipart/form-data
+ *     parameters:
+ *       - name: file
+ *         in: formData   # <-----
+ *         description: The uploaded file data
+ *         required: true
+ *         type: file     # <-----
  *     responses:
- *      201:
- *        description: Created
- *      409:
- *        description: Conflict
- *      404:
- *        description: Not Found
+ *       201:
+ *         description: "Status Created"
  */
 
 //      DELETE A GIF
