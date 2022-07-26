@@ -51,6 +51,7 @@ class GifController {
     //     error: err.message,
     //   });
     // }
+
     const file = req.files.image;
     if (!file) return res.status(404).json({ message: 'Image is required' });
 
