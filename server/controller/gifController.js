@@ -14,57 +14,35 @@ cloudinary.config({
 class GifController {
   static async createGif(req, res) {
     try {
-      // const { title } = req.body;
-      // const image = req.files.image;
-      // let imageURL;
-      // let publicId;
-      // await cloudinary.uploader.upload(image.tempFilePath, (err, response) => {
-      //   if (err) {
-      //     return res.status(500).send({
-      //       status: 'error',
-      //       message: `Error uploading image`,
-      //       error: err.message,
-      //     });
-      //   }
-      //   imageURL = response.secure_url;
-      //   publicId = response.public_id;
-      // });
-      // const created_at = new Date();
-      // const userId = req.user.userId;
-      // const values = [title, imageURL, publicId, created_at, userId];
-
-      // const images = await pool.query(queries.createNewGif, values);
-      // return res.status(201).send({
-      //   status: 'success',
-      //   data: {
-      //     gifId: images.rows[0].gif_id,
-      //     message: 'GIF image successfully posted',
-      //     createdAt: images.rows[0].created_at,
-      //     title: images.rows[0].title,
-      //     imageURL: images.rows[0].image_url,
-      //     userId: images.rows[0].user_id,
-      //   },
-      // });
-      const file = req.files.image;
-      if (!file) return res.status(404).json({ message: 'Image is required' });
-
       const { title } = req.body;
-      if (!title) return res.status(400).json({ message: 'title is required' });
-
-      const gifcloud = await cloudinary.uploader.upload(file.tempFilePath);
-      const { secure_url: imageURL, public_id: publicId } = gifcloud;
+      const image = req.files.image;
+      let imageURL;
+      let publicId;
+      await cloudinary.uploader.upload(image.tempFilePath, (err, response) => {
+        if (err) {
+          return res.status(500).send({
+            status: 'error',
+            message: `Error uploading image`,
+            error: err.message,
+          });
+        }
+        imageURL = response.secure_url;
+        publicId = response.public_id;
+      });
       const created_at = new Date();
       const userId = req.user.userId;
       const values = [title, imageURL, publicId, created_at, userId];
 
-      await db.query(queries.createNewGif, values);
-      return res.status(201).json({
-        status: 'sucess',
+      const images = await pool.query(queries.createNewGif, values);
+      return res.status(201).send({
+        status: 'success',
         data: {
-          message: 'GIF image successfully posted.',
-          created_at,
-          title,
-          imageUrl: imageURL,
+          gifId: images.rows[0].gif_id,
+          message: 'GIF image successfully posted',
+          createdAt: images.rows[0].created_at,
+          title: images.rows[0].title,
+          imageURL: images.rows[0].image_url,
+          userId: images.rows[0].user_id,
         },
       });
     } catch (err) {
