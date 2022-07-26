@@ -45,6 +45,7 @@ class GifController {
     //       userId: images.rows[0].user_id,
     //     },
     //   });
+
     // } catch (err) {
     //   res.status(500).send({
     //     message: 'Server Error',
