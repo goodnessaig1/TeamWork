@@ -48,8 +48,8 @@ class GifController {
       });
     } catch (err) {
       res.status(500).send({
-        logger: logger.error(new Error('something went wrong')),
-        message: 'Server Error',
+        logger: logger.error(message),
+        // message: 'Server Error',
         error: err.message,
       });
     }
