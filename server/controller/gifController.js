@@ -48,10 +48,7 @@ class GifController {
       });
     } catch (err) {
       res.status(500).send({
-        logger: transactionLogger.error(
-          'Transaction Failed',
-          `{${err} session_id: ${req.id}`
-        ),
+        logger: transactionLogger.error('Transaction Failed', `{${err}`),
         message: 'Server Error',
         error: err.message,
       });
