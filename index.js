@@ -4,6 +4,7 @@ const users = require('./server/routes/adminRoute');
 const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
 const articeRoute = require('./server/routes/articleRoute');
+const logger = require('./server/utils/logger');
 
 const { resolve } = require('path');
 
@@ -91,6 +92,7 @@ const errorHandler = (error) => {
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
+logger.error(new Error('something went wrong'));
 server.on('listening', () => {
   const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
