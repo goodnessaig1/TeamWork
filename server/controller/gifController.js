@@ -2,6 +2,7 @@ const cloudinary = require('cloudinary').v2;
 const queries = require('../queries/gifQuery');
 require('../models/gifModel')();
 const pool = require('../models/db');
+const { DateTime } = require('luxon');
 
 require('dotenv').config();
 
@@ -29,7 +30,7 @@ class GifController {
         imageURL = response.secure_url;
         publicId = response.public_id;
       });
-      const created_at = new Date();
+      const created_at = DateTime.now();
       const userId = req.user.userId;
       const values = [title, imageURL, publicId, created_at, userId];
 
