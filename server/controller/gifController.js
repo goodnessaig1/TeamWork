@@ -2,7 +2,7 @@ const cloudinary = require('cloudinary').v2;
 const queries = require('../queries/gifQuery');
 require('../models/gifModel')();
 const pool = require('../models/db');
-const logger = require('../utils/logger');
+const { usersLogger, transactionLogger } = require('../utils/logger');
 
 require('dotenv').config();
 
@@ -48,7 +48,10 @@ class GifController {
       });
     } catch (err) {
       res.status(500).send({
-        // logger: logger.error(err.message),
+        logger: transactionLogger.error(
+          'Transaction Failed',
+          `{${err} session_id: ${req.id}`
+        ),
         message: 'Server Error',
         error: err.message,
       });
