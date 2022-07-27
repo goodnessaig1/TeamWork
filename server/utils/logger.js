@@ -1,14 +1,7 @@
-const { createLogger, format, transports, config } = require('winston');
+const { createLogger, transports } = require('winston');
 
-const usersLogger = createLogger({
-  levels: config.syslog.levels,
-  transports: [new transports.File({ filename: 'users.log' })],
-});
-const transactionLogger = createLogger({
-  transports: [new transports.File({ filename: 'transaction.log' })],
+const logger = createLogger({
+  transports: [new transports.Console()],
 });
 
-module.exports = {
-  usersLogger: usersLogger,
-  transactionLogger: transactionLogger,
-};
+module.exports = logger;
