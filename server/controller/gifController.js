@@ -48,6 +48,7 @@ class GifController {
     } catch (err) {
       res.status(500).send({
         message: 'Server Error',
+        errors: console.error(err),
         error: err.message,
       });
     }
