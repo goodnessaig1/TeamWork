@@ -32,10 +32,12 @@ class UserController {
         email.toLowerCase(),
       ]);
       if (user.rowCount > 0) {
-        return res.status(401).json({
-          status: 'Failed',
-          message: 'User with this email already exist',
-        });
+        return res
+          .json({
+            status: 'Failed',
+            message: 'User with this email already exist',
+          })
+          .status(401);
       }
       user = await pool.query(queries.createNewUser, [
         firstName,
