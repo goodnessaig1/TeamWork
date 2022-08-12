@@ -82,14 +82,15 @@ class UserController {
       const user = await pool.query(queries.logInUser, [email.toLowerCase()]);
       if (user.rows.length === 0) {
         return res
-          .json({ status: 'Failed', message: 'password or email incorrect' });
+          .json({ status: 'Failed', message: 'password or email incorrect' })
+          .status(401);
       }
       const validPassword = await bcrypt.compare(
         password,
         user.rows[0].password
       );
       if (!validPassword) {
-        return res.status(401).json('Password Or Email is Incorrect');
+        return res.json('Password is Incorrect').status(401);
       }
 
       const token = createToken({
