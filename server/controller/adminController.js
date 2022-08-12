@@ -57,16 +57,18 @@ class UserController {
         email: user.rows[0].email,
         userId: user.rows[0].id,
       });
-      res.status(201).json({
-        status: 'success',
-        data: {
-          message: 'User account successfully created',
-          token,
-          userId: user.rows[0].id,
-          createdAt: user.rows[0].created_at,
-          updatedAt: user.rows[0].updated_at,
-        },
-      });
+      res
+        .json({
+          status: 'success',
+          data: {
+            message: 'User account successfully created',
+            token,
+            userId: user.rows[0].id,
+            createdAt: user.rows[0].created_at,
+            updatedAt: user.rows[0].updated_at,
+          },
+        })
+        .status(201);
     } catch (err) {
       res.status(500).send({
         message: 'Server Error',
