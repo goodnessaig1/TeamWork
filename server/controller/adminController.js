@@ -91,7 +91,7 @@ class UserController {
       );
       if (!validPassword) {
         return res
-          .json({ status: 'Failed', message: 'Password is Incorrect' })
+          .json({ status: 'Failed', message: 'password is Incorrect' })
           .status(401);
       }
 
