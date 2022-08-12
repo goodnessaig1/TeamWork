@@ -90,7 +90,9 @@ class UserController {
         user.rows[0].password
       );
       if (!validPassword) {
-        return res.json('Password is Incorrect').status(401);
+        return res
+          .json({ status: 'Failed', message: 'Password is Incorrect' })
+          .status(401);
       }
 
       const token = createToken({
