@@ -32,6 +32,21 @@ class categoryController {
       });
     }
   }
+
+  static async getAllCategories(req, res) {
+    try {
+      const category = await pool.query(queries.getAllCategories);
+      return res.status(200).json({
+        status: 'Success',
+        data: category.rows,
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
 }
 
 module.exports = categoryController;
