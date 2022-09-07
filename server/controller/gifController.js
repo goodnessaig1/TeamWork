@@ -16,7 +16,7 @@ class GifController {
   static async createGif(req, res) {
     try {
       const { title } = req.body;
-      const image = req.files.path.image;
+      const image = req.files.image.path;
       let imageURL;
       let publicId;
 
