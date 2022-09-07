@@ -20,7 +20,7 @@ class GifController {
       let imageURL;
       let publicId;
 
-      await cloudinary.uploader.upload(image.tempFilePath, (err, response) => {
+      await cloudinary.uploader.upload(image.file.path, (err, response) => {
         if (err) {
           return res.status(500).send({
             status: 'error',
