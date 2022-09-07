@@ -16,11 +16,11 @@ class GifController {
   static async createGif(req, res) {
     try {
       const { title } = req.body;
-      const image = req.files.image;
+      const { image } = req.files.file.path;
       let imageURL;
       let publicId;
 
-      await cloudinary.uploader.upload(image.tempFilePath, (err, response) => {
+      await cloudinary.uploader.upload(image, (err, response) => {
         if (err) {
           return res.status(500).send({
             status: 'error',

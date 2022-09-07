@@ -3,10 +3,15 @@ const controller = require('../controller/gifController');
 const commentController = require('../controller/gifComment');
 const authorization = require('../middleware/authorization');
 const validation = require('../middleware/validation');
-// const formidable = require('express-formidable');
+const formidable = require('express-formidable');
 
 //   GIF ROUTES FOR UPLOADING
-router.post('/', authorization, controller.createGif);
+router.post(
+  '/',
+  authorization,
+  formidable({ maxFileSize: 5 * 1024 * 1024 }),
+  controller.createGif
+);
 
 router.get('/', authorization, controller.getAllgifs);
 
