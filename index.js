@@ -4,7 +4,7 @@ const users = require('./server/routes/adminRoute');
 const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
 const articeRoute = require('./server/routes/articleRoute');
-const formidableMiddleware = require('express-formidable');
+// const formidableMiddleware = require('express-formidable');
 
 const { resolve } = require('path');
 
@@ -12,7 +12,7 @@ const http = require('http');
 
 const app = express();
 const cors = require('cors');
-app.use(formidableMiddleware());
+// app.use(formidableMiddleware());
 
 // ======== SWAGGER DOCUMENTATION ROUTE
 
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(resolve(__dirname, 'src/public')));
-// app.use(fileupload({ useTempFiles: true }));
+app.use(fileupload({ useTempFiles: true }));
 app.use(express.json());
 app.use(cors());
 
