@@ -6,7 +6,7 @@ const validation = require('../middleware/validation');
 const formidable = require('express-formidable');
 
 //   GIF ROUTES FOR UPLOADING
-router.post('/', authorization, controller.createGif);
+router.post('/', authorization, formidable(), controller.createGif);
 
 router.get('/', authorization, controller.getAllgifs);
 
