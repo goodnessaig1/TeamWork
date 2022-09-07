@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(resolve(__dirname, 'src/public')));
-app.use(fileupload({ useTempFiles: true }));
+// app.use(fileupload({ useTempFiles: true }));
 app.use(express.json());
 app.use(cors());
 
