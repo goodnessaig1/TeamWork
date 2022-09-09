@@ -17,7 +17,6 @@ class GifController {
     try {
       const { title, image } = req.body;
       // const image = req.files.image;
-      // lllll
       let imageURL;
       let publicId;
 
