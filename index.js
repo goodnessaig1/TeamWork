@@ -4,6 +4,8 @@ const users = require('./server/routes/adminRoute');
 const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
 const articeRoute = require('./server/routes/articleRoute');
+// const formidable = require('express-formidable');
+// const bodyParser = require('body-parser');
 
 const { resolve } = require('path');
 
@@ -13,6 +15,8 @@ const app = express();
 const cors = require('cors');
 
 // ======== SWAGGER DOCUMENTATION ROUTE
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
 const swaggerUi = require('swagger-ui-express');
 
@@ -24,7 +28,7 @@ app.get('/', (req, resp) => {
 });
 
 //       MIDDLEWARES
-
+// app.use(formidable());
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(

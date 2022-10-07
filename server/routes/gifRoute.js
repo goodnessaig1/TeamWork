@@ -4,8 +4,11 @@ const commentController = require('../controller/gifComment');
 const authorization = require('../middleware/authorization');
 const validation = require('../middleware/validation');
 // const formidable = require('express-formidable');
-
+// import multipart from 'connect-multiparty';
+const multipart = require('connect-multiparty');
 //   GIF ROUTES FOR UPLOADING
+
+const multipartMiddleware = multipart();
 router.post('/', authorization, controller.createGif);
 
 router.get('/', authorization, controller.getAllgifs);

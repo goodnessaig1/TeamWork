@@ -5,6 +5,7 @@ const logInUser = 'SELECT * FROM users WHERE email = $1';
 const selectUser =
   'SELECT userid, email, first_name, last_name FROM users WHERE userid = $1';
 const getAllUsers = 'SELECT * FROM users';
+const userAuth = 'SELECT * FROM users WHERE email = $1';
 
 module.exports = {
   checkIfUserExist,
@@ -12,4 +13,5 @@ module.exports = {
   logInUser,
   selectUser,
   getAllUsers,
+  userAuth,
 };

@@ -133,6 +133,32 @@ class UserController {
       });
     }
   }
+
+  static async userAuth(req, res) {
+    try {
+      const email = req.user.email;
+      const user = await pool.query(queries.userAuth, [email]);
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          userId: user.rows[0].id,
+          firstName: user.rows[0].first_name,
+          lastName: user.rows[0].last_name,
+          gender: user.rows[0].gender,
+          jobRole: user.rows[0].jobrole,
+          department: user.rows[0].department,
+          isAdmin: user.rows[0].is_admin,
+          address: user.rows[0].address,
+          createdAt: user.rows[0].created_at,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
 }
 
 module.exports = UserController;
