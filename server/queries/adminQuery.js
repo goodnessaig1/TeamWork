@@ -6,6 +6,13 @@ const selectUser =
   'SELECT userid, email, first_name, last_name FROM users WHERE userid = $1';
 const getAllUsers = 'SELECT * FROM users';
 const userAuth = 'SELECT * FROM users WHERE email = $1';
+const selectUserId = 'SELECT * FROM users WHERE id =$1';
+
+const uploadPix =
+  'UPDATE users SET profile_pix = $1 WHERE id = $2  RETURNING *';
+const coverPhoto =
+  'UPDATE users SET cover_photo = $1 WHERE id = $2  RETURNING *';
+const phoneNumber = 'UPDATE users SET number = $1 WHERE id = $2  RETURNING *';
 
 module.exports = {
   checkIfUserExist,
@@ -14,4 +21,8 @@ module.exports = {
   selectUser,
   getAllUsers,
   userAuth,
+  selectUserId,
+  uploadPix,
+  coverPhoto,
+  phoneNumber,
 };

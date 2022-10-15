@@ -3,7 +3,16 @@ const bcrypt = require('bcrypt');
 const pool = require('../models/db');
 const queries = require('../queries/adminQuery');
 const { createToken } = require('../utils/jwtGenerator');
+const cloudinary = require('cloudinary').v2;
+
 require('../models/userModel')();
+require('dotenv').config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 class UserController {
   // ADMIN AND EMPLOYEE REGISTER
@@ -144,12 +153,136 @@ class UserController {
           userId: user.rows[0].id,
           firstName: user.rows[0].first_name,
           lastName: user.rows[0].last_name,
+          profile: user.rows[0].profile_pix,
+          coverPhoto: user.rows[0].cover_photo,
+          number: user.rows[0].number,
           gender: user.rows[0].gender,
           jobRole: user.rows[0].jobrole,
           department: user.rows[0].department,
           isAdmin: user.rows[0].is_admin,
           address: user.rows[0].address,
           createdAt: user.rows[0].created_at,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
+
+  static async userProfilePix(req, res) {
+    try {
+      const profile = req.files.profile;
+      const userId = req.user.userId;
+      const user = await pool.query(queries.selectUserId, [userId]);
+      if (user.rowCount === 0)
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'User Not Found',
+        });
+      if (user.rows[0].id !== req.user.userId) {
+        return res.status(403).json({
+          status: 'Failed',
+          message: 'You cannot update this user account',
+        });
+      }
+      let imageURL;
+      await cloudinary.uploader.upload(
+        profile.tempFilePath,
+        (err, response) => {
+          if (err) {
+            return res.status(500).send({
+              status: 'error',
+              message: `Error uploading image`,
+              error: err.message,
+            });
+          }
+          imageURL = response.secure_url;
+        }
+      );
+      const values = [imageURL, userId];
+      const profilePix = await pool.query(queries.uploadPix, values);
+      return res.status(201).send({
+        status: 'success',
+        data: {
+          profile: profilePix.rows[0].profile_pix,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
+  static async userCoverPhoto(req, res) {
+    try {
+      const photo = req.files.photo;
+      const userId = req.user.userId;
+      const user = await pool.query(queries.selectUserId, [userId]);
+      if (user.rowCount === 0)
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'User Not Found',
+        });
+      if (user.rows[0].id !== req.user.userId) {
+        return res.status(403).json({
+          status: 'Failed',
+          message: 'You cannot update this user account',
+        });
+      }
+      let imageURL;
+      await cloudinary.uploader.upload(photo.tempFilePath, (err, response) => {
+        if (err) {
+          return res.status(500).send({
+            status: 'error',
+            message: `Error uploading image`,
+            error: err.message,
+          });
+        }
+        imageURL = response.secure_url;
+      });
+      const values = [imageURL, userId];
+      const coverPhoto = await pool.query(queries.coverPhoto, values);
+      return res.status(201).send({
+        status: 'success',
+        data: {
+          profile: coverPhoto.rows[0].cover_photo,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
+
+  static async phoneNumber(req, res) {
+    try {
+      const { number } = req.body;
+      const { userId } = req.user;
+
+      const user = await pool.query(queries.selectUserId, [userId]);
+      if (user.rowCount === 0)
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'User Not Found',
+        });
+      if (user.rows[0].id !== req.user.userId) {
+        return res.status(403).json({
+          status: 'Failed',
+          message: 'You cannot update this user account',
+        });
+      }
+      const values = [number, userId];
+      const phoneNumber = await pool.query(queries.phoneNumber, values);
+      return res.status(201).json({
+        status: 'success',
+        data: {
+          phoneNumber: phoneNumber.rows[0].number,
         },
       });
     } catch (err) {
