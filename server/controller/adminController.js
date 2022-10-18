@@ -151,6 +151,7 @@ class UserController {
         status: 'success',
         data: {
           userId: user.rows[0].id,
+          email: user.rows[0].email,
           firstName: user.rows[0].first_name,
           lastName: user.rows[0].last_name,
           profile: user.rows[0].profile_pix,
