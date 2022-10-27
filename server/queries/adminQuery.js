@@ -14,6 +14,9 @@ const coverPhoto =
   'UPDATE users SET cover_photo = $1 WHERE id = $2  RETURNING *';
 const phoneNumber = 'UPDATE users SET number = $1 WHERE id = $2  RETURNING *';
 
+const changePassword =
+  'UPDATE users SET password = $1 WHERE email = $2  RETURNING *';
+
 module.exports = {
   checkIfUserExist,
   createNewUser,
@@ -25,4 +28,5 @@ module.exports = {
   uploadPix,
   coverPhoto,
   phoneNumber,
+  changePassword,
 };

@@ -128,6 +128,43 @@ class UserController {
     }
   }
 
+  static async changePassword(req, res) {
+    try {
+      const { previousPassword, newPassword } = req.body;
+      const email = req.user.email;
+      // eslint-disable-next-line prettier/prettier
+      const user = await pool.query(queries.logInUser, [email.toLowerCase()]);
+      const validPassword = await bcrypt.compare(
+        previousPassword,
+        user.rows[0].password
+      );
+      if (!validPassword) {
+        return res
+          .json({ status: 'Failed', message: 'password is Incorrect' })
+          .status(401);
+      }
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const bcryptPassword = await bcrypt.hash(newPassword, salt);
+      const userNewPassword = await pool.query(queries.changePassword, [
+        bcryptPassword,
+        email,
+      ]);
+      res.json({
+        status: 'success',
+        data: {
+          message: 'You have succefully changed your password',
+          newPassword: userNewPassword.rows[0].password,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
+
   static async getAllUsers(req, res) {
     try {
       const users = await pool.query(queries.getAllUsers);
