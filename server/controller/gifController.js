@@ -31,7 +31,7 @@ class GifController {
         imageURL = response.secure_url;
         publicId = response.public_id;
       });
-      console.log(req);
+      // console.log(req);
       const created_at = DateTime.now();
       const userId = req.user.userId;
       const values = [title, imageURL, publicId, created_at, userId];

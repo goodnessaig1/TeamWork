@@ -27,9 +27,3 @@ module.exports = () => {
   };
   createGenresTable();
 };
-
-// SELECT articles.article_id as id ,articles.user_id as user_id , articles.title, articles.article as post, first_name, last_name, articles.created_at FROM articles INNER JOIN users ON articles.user_id = users.id
-
-// UNION
-
-// SELECT gifs.gif_id, gifs.user_id as id ,gifs.title, gifs.image_url as post, first_name, last_name, gifs.created_at FROM gifs INNER JOIN users ON gifs.user_id = users.id

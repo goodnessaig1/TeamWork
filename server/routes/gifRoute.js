@@ -1,14 +1,12 @@
 const router = require('express').Router();
 const controller = require('../controller/gifController');
 const commentController = require('../controller/gifComment');
+const likeController = require('../controller/likesController');
 const authorization = require('../middleware/authorization');
 const validation = require('../middleware/validation');
-// const formidable = require('express-formidable');
-// import multipart from 'connect-multiparty';
-const multipart = require('connect-multiparty');
+
 //   GIF ROUTES FOR UPLOADING
 
-const multipartMiddleware = multipart();
 router.post('/', authorization, controller.createGif);
 
 router.get('/', authorization, controller.getAllgifs);
@@ -24,5 +22,6 @@ router.post(
   validation.comment,
   commentController.createComment
 );
+router.post('/:gifId/gif_likes', authorization, likeController.gifLike);
 
 module.exports = router;

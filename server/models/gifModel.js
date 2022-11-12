@@ -18,12 +18,23 @@ module.exports = () => {
         CREATE TABLE IF NOT EXISTS gif_comment (
             gif_id INTEGER NOT NULL,
             comment_id SERIAL PRIMARY KEY,
-            comments VARCHAR NOT NULL,        
+            comment VARCHAR NOT NULL,        
             created_at timestamp with time zone NOT NULL,
-            user_id INTEGER NOT NULL,
+            author_id INTEGER NOT NULL,
             user_name  VARCHAR(255) NOT NULL,
-            FOREIGN KEY (user_id) 
+            FOREIGN KEY (author_id) 
             REFERENCES users (id));
+
+        CREATE TABLE IF NOT EXISTS gif_likes (
+            like_id SERIAL PRIMARY KEY, 
+            likes VARCHAR (250) NOT NULL,
+            created_at timestamp with time zone NOT NULL,
+            gif_id INTEGER NOT NULL,
+            author_id INTEGER NOT NULL,
+            user_name  CHARACTER VARYING,
+            FOREIGN KEY (author_id) 
+            REFERENCES users (id)
+            )
       `);
     } catch (error) {
       console.log(error);

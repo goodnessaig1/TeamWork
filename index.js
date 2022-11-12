@@ -4,6 +4,7 @@ const users = require('./server/routes/adminRoute');
 const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
 const articeRoute = require('./server/routes/articleRoute');
+const feedsRoute = require('./server/routes/feedRoute');
 // const formidable = require('express-formidable');
 // const bodyParser = require('body-parser');
 
@@ -58,6 +59,9 @@ app.use('/v1/categories', categoryRoutes);
 
 //  ARTICLE ROUTE
 app.use('/v1/articles', articeRoute);
+
+//  FEEDS ROUTE
+app.use('/v1/feeds', feedsRoute);
 
 const normalizePort = (val) => {
   const port = parseInt(val, 10);

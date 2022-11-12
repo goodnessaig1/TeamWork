@@ -11,7 +11,7 @@ module.exports = () => {
         user_id INTEGER NOT NULL,
         flagged BOOLEAN DEFAULT false NOT NULL,
         flagged_at DATE DEFAULT NULL,
-        created_at DATE NOT NULL,
+        created_at timestamp with time zone NOT NULL,
         updated_at DATE NOT NULL,
         category_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) 

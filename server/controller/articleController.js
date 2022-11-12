@@ -170,6 +170,35 @@ class ArticleController {
     }
   }
 
+  static async getArticleComment(req, res) {
+    try {
+      const { articleId } = req.params;
+      const article = await pool.query(queries.getSingleArticle, [articleId]);
+      const comments = await pool.query(queries.getArticleComment, [articleId]);
+      if (article.rows.length === 0) {
+        return res.status(404).json({
+          status: 'Failed',
+          error: 'Article with the specified articleId NOT found',
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          // id: article.rows[0].article_id,
+          // createdAt: article.rows[0].created_at,
+          // title: article.rows[0].title,
+          // article: article.rows[0].article,
+          comments: comments.rows,
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
+
   static async deleteSingleArticle(req, res) {
     try {
       const { articleId } = req.params;
