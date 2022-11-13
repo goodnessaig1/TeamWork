@@ -6,9 +6,9 @@ const selectAllGifs = 'SELECT * FROM gifs ORDER BY created_at DESC';
 
 const selectUser = `SELECT * FROM users WHERE id = $1`;
 //   GIF COMMENT
-const createGifComment = `INSERT INTO gif_comment (gif_id, comments, user_id, created_at, user_name )VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+const createGifComment = `INSERT INTO gif_comment (gif_id, comment, user_id, created_at, user_name )VALUES ($1, $2, $3, $4, $5) RETURNING *`;
 const getGifComments =
-  'SELECT comment_id as commentid, comments, gif_comment.created_at as createdat, gif_comment.user_id as useauthorIdrId FROM gif_comment WHERE gif_id = $1 ORDER BY created_at DESC';
+  'SELECT comment_id as commentid, comment, gif_comment.created_at as createdat, gif_comment.user_id as useauthorIdrId FROM gif_comment WHERE gif_id = $1 ORDER BY created_at DESC';
 
 const selectIfUserLike = `SELECT author_id FROM gif_likes WHERE gif_id = $1`;
 
