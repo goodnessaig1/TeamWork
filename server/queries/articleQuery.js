@@ -15,7 +15,6 @@ const getAllArticles = `SELECT article_id, title,user_id, article, first_name as
 // GET ALL ARTICLES
 const getSingleArticle = `SELECT * FROM articles WHERE article_id = $1`;
 
-const deleteLike = `DELETE FROM articleLikes where author_id = $1`;
 // DELETE A PARTICLE ARTICLES
 const deleteSingleArticle = `DELETE FROM articles WHERE article_id = $1`;
 
@@ -32,6 +31,7 @@ const getArticleLike =
   'SELECT comment_id as commentId, comment, author_id as authorId FROM articles_comments WHERE article_id = $1';
 const createLike =
   'INSERT INTO articleLikes (likes, created_at, article_id, author_id) VALUES ($1, $2, $3, $4)RETURNING * ';
+const deleteLike = `DELETE FROM articleLikes where author_id = $1`;
 
 module.exports = {
   createNewArticle,

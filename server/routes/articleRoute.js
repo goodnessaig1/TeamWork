@@ -37,11 +37,6 @@ router.post(
   validation.articleComment,
   articleController.createComment
 );
-router.post(
-  '/:articleId/like',
-  authorization,
-  // validation.articleComment,
-  controllers.addLikes
-);
+router.post('/:articleId/like', authorization, controllers.addLikes);
 
 module.exports = router;

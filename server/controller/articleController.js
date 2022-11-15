@@ -184,10 +184,6 @@ class ArticleController {
       return res.status(200).json({
         status: 'success',
         data: {
-          // id: article.rows[0].article_id,
-          // createdAt: article.rows[0].created_at,
-          // title: article.rows[0].title,
-          // article: article.rows[0].article,
           comments: comments.rows,
         },
       });
