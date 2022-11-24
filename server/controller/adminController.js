@@ -255,6 +255,7 @@ class UserController {
       });
     }
   }
+
   static async userCoverPhoto(req, res) {
     try {
       const photo = req.files.photo;

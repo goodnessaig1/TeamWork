@@ -13,7 +13,6 @@ class gifController {
       const { gifId } = req.params;
       const createdAt = DateTime.now();
       const userId = req.user.userId;
-
       const gif = await pool.query(queries.selectGif, [gifId]);
       if (gif.rows.length === 0) {
         return res.status(404).json({
@@ -22,12 +21,9 @@ class gifController {
         });
       }
       const user = await pool.query(queries.selectUser, [userId]);
-
       const userName = user.rows[0].first_name;
       const values = [gifId, comment, userId, createdAt, userName];
-
       const gifComment = await pool.query(queries.createGifComment, values);
-
       return res.status(201).json({
         status: 'success',
         data: {

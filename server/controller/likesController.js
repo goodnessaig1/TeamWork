@@ -9,12 +9,11 @@ require('../models/likesModel')();
 require('dotenv').config();
 
 class LikesController {
-  static async addLikes(req, res) {
+  static async articleLikes(req, res) {
     const { articleId } = req.params;
     const userId = req.user.userId;
     const createdAt = DateTime.now();
     const article = await pool.query(queries.selectArticle, [articleId]);
-
     if (!article.rowCount > 0)
       return res
         .status(404)

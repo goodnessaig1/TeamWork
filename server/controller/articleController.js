@@ -10,20 +10,16 @@ class ArticleController {
   static async createArticle(req, res) {
     try {
       const { title, article, categoryId } = req.body;
-
       const category = await pool.query(queries.selectCategory, [categoryId]);
-
+      const { userId } = req.user;
       if (category.rows.length === 0) {
         return res.status(404).json({
           status: 'Failed',
           message: 'Category with the specified categoryId NOT found',
         });
       }
-
       const createdAt = DateTime.now();
       const updatedAt = DateTime.now();
-
-      const { userId } = req.user;
       const values = [title, article, createdAt, updatedAt, categoryId, userId];
       const articles = await pool.query(queries.createNewArticle, values);
       return res.status(201).json({
@@ -48,9 +44,7 @@ class ArticleController {
     try {
       const { articleId } = req.params;
       const { flagged } = req.body;
-
       const article = await pool.query(queries.selectArticle, [articleId]);
-
       if (article.rows.length === 0) {
         return res.status(404).json({
           status: 'Failed',
@@ -89,7 +83,6 @@ class ArticleController {
       const { articleId } = req.params;
       const { title, article } = req.body;
       const user = await pool.query(queries.selectArticle, [articleId]);
-
       if (user.rowCount === 0)
         return res.status(404).json({
           status: 'Failed',
@@ -198,7 +191,6 @@ class ArticleController {
   static async deleteSingleArticle(req, res) {
     try {
       const { articleId } = req.params;
-
       const user = await pool.query(queries.selectArticle, [articleId]);
       if (user.rowCount === 0)
         return res.status(404).json({ message: 'Article Not Found' });

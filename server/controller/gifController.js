@@ -19,7 +19,6 @@ class GifController {
       const image = req.files.image;
       let imageURL;
       let publicId;
-
       await cloudinary.uploader.upload(image.tempFilePath, (err, response) => {
         if (err) {
           return res.status(500).send({
@@ -31,11 +30,9 @@ class GifController {
         imageURL = response.secure_url;
         publicId = response.public_id;
       });
-      // console.log(req);
       const created_at = DateTime.now();
       const userId = req.user.userId;
       const values = [title, imageURL, publicId, created_at, userId];
-
       const images = await pool.query(queries.createNewGif, values);
       return res.status(201).send({
         status: 'success',
@@ -59,7 +56,6 @@ class GifController {
   static async deleteGif(req, res) {
     try {
       const { gifId } = req.params;
-
       const gif = await pool.query(queries.selectGif, [gifId]);
       if (gif.rows.length === 0) {
         return res.status(404).json({
@@ -67,16 +63,13 @@ class GifController {
           error: 'Gif with the specified gifId NOT found',
         });
       }
-
       if (gif.rows[0].user_id !== req.user.userId) {
         return res.status(403).json({
           status: 'error',
           message: 'You cannot delete this Gif',
         });
       }
-
       await cloudinary.uploader.destroy(gif.rows[0].public_id);
-
       await pool.query(queries.deleteGif, [gifId]);
       if (gif.rowCount === 0)
         return res.status(404).json({ message: 'Gif Not Found' });
@@ -114,14 +107,12 @@ class GifController {
       const { gifId } = req.params;
       const gif = await pool.query(queries.selectGif, [gifId]);
       const gifComment = await pool.query(queries.getGifComments, [gifId]);
-
       if (gif.rows.length === 0) {
         return res.status(404).json({
           status: 'Failed',
           error: 'Gif with the specified gifId NOT found',
         });
       }
-
       return res.status(200).json({
         status: 'success',
         data: {
