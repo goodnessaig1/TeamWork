@@ -4,7 +4,7 @@ module.exports = () => {
   const createArticlesCommentsTable = async () => {
     try {
       await pool.query(`CREATE TABLE IF NOT EXISTS articles_comments (
-                    comment_id SERIAL PRIMARY KEY, 
+                    id SERIAL PRIMARY KEY, 
                     comment VARCHAR (250) NOT NULL,
                     created_at timestamp with time zone NOT NULL,
                     article_id INTEGER NOT NULL,

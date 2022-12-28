@@ -5,7 +5,7 @@ module.exports = () => {
     try {
       await pool.query(`CREATE TABLE IF NOT EXISTS 
         articles (
-        article_id SERIAL PRIMARY KEY,
+        id SERIAL PRIMARY KEY,
         title CHARACTER VARYING NOT NULL,
         article CHARACTER VARYING NOT NULL,
         user_id INTEGER NOT NULL,
