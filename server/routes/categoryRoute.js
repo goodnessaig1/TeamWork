@@ -12,4 +12,6 @@ router.post(
   controller.createCategory
 );
 
+router.get('/', authorization, controller.getAllCategories);
+
 module.exports = router;

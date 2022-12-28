@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --timeout 3000",
-    "start": "nodemon index.js",
+    "start": "nodemon server.js",
     "migration": "node migration/migration.js",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
@@ -32,11 +32,14 @@
   "dependencies": {
     "@hapi/joi": "^16.1.7",
     "bcrypt": "^5.0.1",
+    "body-parser": "^1.18.3",
     "cloudinary": "^1.30.0",
+    "connect-multiparty": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-fileupload": "^1.4.0",
+    "express-formidable": "^1.2.0",
     "express-validator": "^6.14.1",
     "full-icu": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
@@ -45,8 +48,10 @@
     "moment": "^2.29.3",
     "nodemon": "^2.0.16",
     "pg": "^8.7.3",
+    "postgresql": "^0.0.1",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.4.0",
-    "validatorjs": "^3.22.1"
+    "validatorjs": "^3.22.1",
+    "winston": "^3.8.1"
   }
 }

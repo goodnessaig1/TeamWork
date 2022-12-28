@@ -1,23 +1,36 @@
-var pg = require("pg");
+require('dotenv').config();
+const { Pool } = require('pg');
 
+console.log(`This is a ${process.env.NODE_ENV} environment`);
 
-var client = new pg.Client({
-    user: "postgres",
-    host: "localhost",
-    database: "team",
-    password: "osemudiame1",
-    port: 5000,
-});;
-client.connect(function(err) {
-  if (err) {
-    return console.error("could not connect to postgres", err);
-  }
-  client.query('SELECT NOW() AS "theTime"', function(err, result) {
-    if (err) {
-      return console.error("error running query", err);
-    }
-    console.log("Database Connected");
+let pool;
+const connectionString = process.env.DATABASE_URL;
+if (process.env.NODE_ENV === 'production') {
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production',
   });
-});
+} else if (process.env.NODE_ENV === 'test') {
+  pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'team',
+    password: 'osemudiame1',
+    port: 5432,
+  });
+} else {
+  pool = new Pool({
+    connectionString,
+  });
+}
 
-module.exports = client;
+if (!pool) {
+  console.log('Database Setup  Was Unsuccessful');
+  process.exit(1);
+} else {
+  pool.on('connect', () => {
+    console.log('connected to the Database Successfully');
+  });
+}
+
+module.exports = pool;

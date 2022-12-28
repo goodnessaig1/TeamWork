@@ -10,16 +10,14 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
+        url: 'https://tea-a4jv.onrender.com/',
       },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'apiKey',
-          name: 'token',
+          type: 'http',
           scheme: 'bearer',
-          in: 'header',
         },
       },
     },

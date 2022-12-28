@@ -52,14 +52,14 @@
  *              application/json:
  *                  schema:
  *                      type: object
- *                      properties:
- *                          email:
- *                              type: string
- *                          password:
- *                              type: string
- *              example:
- *                  email: "user@email.com"
- *                  password: "root"
+ *                  properties:
+ *                      email:
+ *                          type: string
+ *                      password:
+ *                          type: string
+ *                  example:
+ *                      email: "goodness@gmail.com"
+ *                      password: "password123"
  *      produces:
  *          - application/json
  *      responses:
@@ -151,6 +151,10 @@
  *        application/json:
  *           schema:
  *            type: object
+ *            example:
+ *               title: "NIGERIA ELECTION 2023"
+ *               article: "This post is all about politics and the dangers of political apaty"
+ *               categoryId: "2"
  *     responses:
  *      201:
  *        description: Created
@@ -177,6 +181,9 @@
  *        application/json:
  *           schema:
  *            type: object
+ *           example:
+ *               title: "NIGERIA ELECTION 2023"
+ *               article: "This post is all about politics and the dangers of political apaty"
  *     parameters:
  *      - name: articleId
  *        in: path
@@ -269,24 +276,30 @@
  * @swagger
  * /v1/gifs:
  *  post:
- *     security:
- *       - bearerAuth: []
- *     tags:
- *     - Gifs
- *     summary: Post a Gif to the DB
- *     requestBody:
- *      required: true
- *      content:
- *        application/json:
- *           schema:
- *            type: object
- *     responses:
- *      201:
- *        description: Created
- *      409:
- *        description: Conflict
- *      404:
- *        description: Not Found
+ *       security:
+ *         - bearerAuth: []
+ *       tags:
+ *       - Gifs
+ *       summary: Post a Gif to the DB
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           multipart/form-data:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 image:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     format: binary
+ *                 title:
+ *                   type: string
+ *       responses:
+ *         201:
+ *           description: "Status Created"
+ *         500:
+ *           description: "Error importing file"
  */
 
 //      DELETE A GIF
@@ -338,6 +351,9 @@
  *        application/json:
  *           schema:
  *            type: object
+ *           example:
+ *               comment: "My comment on politics"
+ *               flagged: "false"
  *     responses:
  *      201:
  *        description: Comment created successfully
@@ -371,6 +387,8 @@
  *        application/json:
  *           schema:
  *            type: object
+ *           example:
+ *               comment: "My comment on this vintage shirt"
  *     responses:
  *      201:
  *        description: Comment created successfully
@@ -401,6 +419,8 @@
  *        application/json:
  *           schema:
  *            type: object
+ *           example:
+ *               flagged: "true"
  *     parameters:
  *      - name: articleId
  *        in: path
@@ -430,12 +450,15 @@
  *     tags:
  *     - Category
  *     summary: Create a Category
+ *     description: Category must be specific and unique
  *     requestBody:
  *      required: true
  *      content:
  *        application/json:
  *           schema:
  *            type: object
+ *            example:
+ *               categoryName: "Sports"
  *     responses:
  *      201:
  *        description: Category Created

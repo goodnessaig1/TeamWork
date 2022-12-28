@@ -1,4 +1,4 @@
-const pool = require("./db");
+const pool = require('./db');
 
 module.exports = () => {
   const createGenresTable = async () => {
@@ -15,6 +15,9 @@ module.exports = () => {
           department VARCHAR(255),
           is_admin BOOLEAN NOT NULL DEFAULT false,
           address VARCHAR(255),
+          profile_pix VARCHAR(128) NULL,
+          cover_photo VARCHAR(128) NULL,
+          number VARCHAR(128) NULL,
           created_at  DATE NOT NULL,
           updated_at  DATE NOT NULL);
       `);

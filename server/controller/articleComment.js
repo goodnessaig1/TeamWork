@@ -10,7 +10,6 @@ class ArticleCommentController {
       const { articleId } = req.params;
       const createdAt = DateTime.now();
       const userId = req.user.userId;
-
       const article = await pool.query(queries.selectArticle, [articleId]);
       if (article.rows.length === 0) {
         return res.status(404).json({
@@ -18,9 +17,7 @@ class ArticleCommentController {
           error: 'Article with the specified ID NOT found',
         });
       }
-
       const values = [comment, createdAt, articleId, flagged, userId];
-
       const articleComment = await pool.query(queries.createComment, values);
       return res.status(201).json({
         status: 'success',

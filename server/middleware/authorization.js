@@ -1,8 +1,8 @@
 /* eslint-disable consistent-return */
 const jwt = require('jsonwebtoken');
 
-const authorization = (req, res, next) => {
-  const authHeader = req.headers.token;
+const authorizations = (req, res, next) => {
+  const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(' ')[1];
     if (!token)
@@ -20,4 +20,4 @@ const authorization = (req, res, next) => {
   }
 };
 
-module.exports = authorization;
+module.exports = authorizations;
