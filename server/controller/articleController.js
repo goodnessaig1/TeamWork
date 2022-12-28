@@ -26,7 +26,7 @@ class ArticleController {
         status: 'success',
         data: {
           message: 'Article successfully posted',
-          articleId: articles.rows[0].article_id,
+          articleId: articles.rows[0].id,
           createdAt,
           title,
           catigoryName: category.rows[0].category_name,
@@ -148,7 +148,7 @@ class ArticleController {
       return res.status(200).json({
         status: 'success',
         data: {
-          id: article.rows[0].article_id,
+          id: article.rows[0].id,
           createdAt: article.rows[0].created_at,
           title: article.rows[0].title,
           article: article.rows[0].article,

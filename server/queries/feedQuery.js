@@ -18,7 +18,11 @@ FROM gifs g
 LEFT JOIN gif_comment c ON c.gif_id = g.id
 LEFT JOIN users u ON u.id = g.user_id
 LEFT JOIN users u2 ON u2.id = c.author_id
-ORDER BY date DESC
+ORDER BY 
+CASE WHEN C.creation_date IS NULL THEN P.creation_date ELSE C.creation_date END
+DESC
+
+ORDER BY date DESC, post_date;
 `;
 
 const getArticlesFeed = `

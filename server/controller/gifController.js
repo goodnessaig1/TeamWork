@@ -37,7 +37,7 @@ class GifController {
       return res.status(201).send({
         status: 'success',
         data: {
-          gifId: images.rows[0].gif_id,
+          gifId: images.rows[0].id,
           message: 'GIF image successfully posted',
           createdAt: images.rows[0].created_at,
           title: images.rows[0].title,
@@ -116,7 +116,7 @@ class GifController {
       return res.status(200).json({
         status: 'success',
         data: {
-          id: gif.rows[0].gif_id,
+          id: gif.rows[0].id,
           createdAt: gif.rows[0].created_at,
           title: gif.rows[0].title,
           url: gif.rows[0].image_url,
