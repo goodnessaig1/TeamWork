@@ -10,12 +10,8 @@ const flag =
 //UPDATE ARTICLE QUERY
 const updateArticle =
   'UPDATE articles SET title = $1, article = $2, updated_at = $3 WHERE id = $4  RETURNING *';
-
-// GET ARTICLES
 const getAllArticles = `SELECT articles.id, title,user_id, article, first_name as username, category_id, articles.created_at, articles.updated_at, category_id, flagged, flagged_at FROM articles INNER JOIN users ON articles.user_id = users.id ORDER BY updated_at DESC`;
 const getSingleArticle = `SELECT * FROM articles WHERE id = $1`;
-
-// DELETE A PARTICLE ARTICLES
 const deleteSingleArticle = `DELETE FROM articles WHERE id = $1`;
 
 // ARTCLE COMMENT QUERY
@@ -26,9 +22,6 @@ const createComment =
 
 // ======== ARTICLE LIKES
 const selectIfUserLike = `SELECT * FROM articleLikes where article_id = $1 and author_id = $2`;
-
-const getArticleLike =
-  'SELECT comment_id as commentId, comment, author_id as authorId FROM articles_comments WHERE article_id = $1';
 const createLike =
   'INSERT INTO articleLikes (article_id, author_id) VALUES ($1, $2)RETURNING * ';
 const deleteLike = `DELETE FROM articleLikes where author_id = $1`;
@@ -44,7 +37,6 @@ module.exports = {
   getArticleComment,
   deleteSingleArticle,
   createComment,
-  getArticleLike,
   selectIfUserLike,
   createLike,
   deleteLike,
