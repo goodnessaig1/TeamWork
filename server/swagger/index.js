@@ -608,7 +608,7 @@
  *        description: Not Found
  */
 
-//      Like article
+//      Like an article
 
 // =============
 /**
