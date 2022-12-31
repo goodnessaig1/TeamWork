@@ -20,7 +20,7 @@ const getArticleComment =
 const createComment =
   'INSERT INTO articles_comments (comment, created_at, article_id, flagged, author_id) VALUES ($1, $2, $3, $4, $5)RETURNING * ';
 
-// ======== ARTICLE LIKES
+// ========= ARTICLE LIKES
 const selectIfUserLike = `SELECT * FROM articleLikes where article_id = $1 and author_id = $2`;
 const createLike =
   'INSERT INTO articleLikes (article_id, author_id) VALUES ($1, $2)RETURNING * ';
