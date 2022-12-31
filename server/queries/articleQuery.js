@@ -16,7 +16,7 @@ const deleteSingleArticle = `DELETE FROM articles WHERE id = $1`;
 
 // ARTCLE COMMENT QUERY
 const getArticleComment =
-  'SELECT articles_comments.id as commentId, comment, author_id as authorId FROM articles_comments WHERE article_id = $1';
+  'SELECT articles_comments.article_id as commentId, comment, author_id as authorId FROM articles_comments WHERE article_id = $1';
 const createComment =
   'INSERT INTO articles_comments (comment, created_at, article_id, flagged, author_id) VALUES ($1, $2, $3, $4, $5)RETURNING * ';
 

@@ -62,3 +62,15 @@
 // select len(likes) - len(replace(likes, ',', ''))
 // from posts
 // where postid = 7
+
+// const getArticlesFeed = `
+// SELECT a.article as post, a.title as title, a.id as postId, c.comment as comment, c.created_at, CONCAT(u.first_name, ' ', u.last_name) as post_author,u2.profile_pix as comment_author_profile, u2.first_name as comment_author,u2.last_name as comment_author_last_name,u.jobrole as author_jobrole, u.profile_pix,
+// (SELECT COUNT(article_id) FROM articles_comments WHERE article_id = a.article_id) as number_of_commennt,
+// (SELECT COUNT(article_id) FROM articleLikes WHERE article_id = a.article_id) as number_of_likes,
+// EXISTS(SELECT * FROM articleLikes l WHERE l.article_id = a.article_id and l.author_id = $1) AS isLiked
+// FROM articles a
+// LEFT JOIN articles_comments c ON c.article_id = a.article_id
+// LEFT JOIN users u ON u.id = a.user_id
+// LEFT JOIN users u2 ON u2.id = c.author_id
+// ORDER BY c.created_at DESC
+// `;
