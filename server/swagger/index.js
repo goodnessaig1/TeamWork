@@ -467,3 +467,202 @@
  *      404:
  *        description: Not Found
  */
+//
+
+// =============   FEEDS
+
+/**
+ * @swagger
+ * /v1/feeds:
+ *  get:
+ *      tags:
+ *         - FEEDS
+ *      security:              # <--- ADD THIS
+ *          - bearerAuth: []     # <--- ADD THIS
+ *      summary: To get all the fields posted on the blog
+ *      description: This api is used to fetch the combination of both articles and gif with the number of likes and comments in each of them
+ *      responses:
+ *          200:
+ *               description: This api is used to fetch all the fields posted
+ *               content:
+ *                    application/json:
+ *                           schema:
+ *                                type: object
+ *                                items:
+ */
+
+//      ADD USER PHONE NUMBER
+
+// =============
+
+/**
+ * @swagger
+ * /auth/v1/number:
+ *  patch:
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *     - Users
+ *     summary: Add or change user phone number
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *            type: object
+ *           example:
+ *               number: "+2348023421333"
+ *     responses:
+ *      201:
+ *        description: Success
+ *      400:
+ *        description: Bad request
+ *      404:
+ *        description: Not Found
+ */
+
+//     UPLOAD USER PFOFILE PHOTO
+
+/**
+ * @swagger
+ * /auth/v1/upload_pix:
+ *  patch:
+ *       security:
+ *         - bearerAuth: []
+ *       tags:
+ *       - Users
+ *       summary: Upload user profile photo
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           multipart/form-data:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 profile:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     format: binary
+ *       responses:
+ *         201:
+ *           description: "Status Created"
+ *         500:
+ *           description: "Error importing file"
+ */
+//     UPLOAD USER COVER PHOTO
+
+/**
+ * @swagger
+ * /auth/v1/cover_photo:
+ *  patch:
+ *       security:
+ *         - bearerAuth: []
+ *       tags:
+ *       - Users
+ *       summary: Upload user cover photo
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           multipart/form-data:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 photo:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     format: binary
+ *       responses:
+ *         201:
+ *           description: "Status Created"
+ *         500:
+ *           description: "Error importing file"
+ */
+
+/**
+ * @swagger
+ * /auth/v1/change_password:
+ *  patch:
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *     - Users
+ *     summary: Change user password
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *           schema:
+ *            type: object
+ *           example:
+ *               previousPassword: "Enter Previous password"
+ *               newPassword: "Enter New password"
+ *               confirmPassword: "Confirm password"
+ *     responses:
+ *      201:
+ *        description: Success
+ *      400:
+ *        description: Bad request
+ *      404:
+ *        description: Not Found
+ */
+
+//      Like article
+
+// =============
+/**
+ * @swagger
+ * /v1/articles/{articleId}/like:
+ *  post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *     - Articles
+ *     summary: To like a particular article
+ *     content:
+ *        application/json:
+ *           schema:
+ *           type: object
+ *     parameters:
+ *      - name: articleId
+ *        in: path
+ *        description: The unique id of an article
+ *        required: true
+ *     responses:
+ *      201:
+ *        description: Success
+ *      400:
+ *        description: Bad request
+ *      404:
+ *        description: Not Found
+ */
+//      Like Gif
+
+// =============
+/**
+ * @swagger
+ * /v1/gifs/{gifId}/gif_likes:
+ *  post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags:
+ *     - Gifs
+ *     summary: To like a particular Gif
+ *     content:
+ *        application/json:
+ *           schema:
+ *           type: object
+ *     parameters:
+ *      - name: gifId
+ *        in: path
+ *        description: The unique id of a gif
+ *        required: true
+ *     responses:
+ *      201:
+ *        description: Success
+ *      400:
+ *        description: Bad request
+ *      404:
+ *        description: Not Found
+ */

@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://tea-a4jv.onrender.com/',
+        url: 'http://localhost:3001/',
       },
     ],
     components: {
