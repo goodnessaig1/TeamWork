@@ -32,7 +32,7 @@ class gifController {
           gifTitle: gif.rows[0].title,
           comment: comment,
           userName: userName,
-          commentId: gifComment.rows[0].comment_id,
+          commentId: gifComment.rows[0].id,
         },
       });
     } catch (err) {
