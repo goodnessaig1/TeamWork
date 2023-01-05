@@ -18,7 +18,7 @@ FROM gifs g
 LEFT JOIN gif_comment c ON c.gif_id = g.id
 LEFT JOIN users u ON u.id = g.user_id
 LEFT JOIN users u2 ON u2.id = c.author_id
-ORDER BY date DESC NULLS LAST, post_date DESC
+ORDER BY post_date DESC, date DESC NULLS LAST
 `;
 
 module.exports = {
