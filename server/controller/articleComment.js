@@ -27,7 +27,7 @@ class ArticleCommentController {
           articleTitle: article.rows[0].title,
           article: article.rows[0].article,
           comment: comment,
-          commentId: articleComment.rows[0].comment_id,
+          commentId: articleComment.rows[0].id,
         },
       });
     } catch (err) {

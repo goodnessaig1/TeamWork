@@ -5,7 +5,9 @@ class FeedsController {
   static async getAllFeeds(req, res) {
     try {
       const userId = req.user.userId;
-      const feeds = await pool.query(queries.getAllFeeds, [userId]);
+      const { offset, limit } = req.query;
+      const values = [userId, limit || 10, offset || 0];
+      const feeds = await pool.query(queries.getAllFeeds, values);
       return res.status(200).json({
         status: 'Success',
         data: feeds.rows,
