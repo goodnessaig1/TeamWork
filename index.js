@@ -5,6 +5,7 @@ const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
 const articeRoute = require('./server/routes/articleRoute');
 const feedsRoute = require('./server/routes/feedRoute');
+const notificationsRoute = require('./server/routes/notificationsRoute');
 
 const { resolve } = require('path');
 
@@ -57,5 +58,7 @@ app.use('/v1/articles', articeRoute);
 
 //  FEEDS ROUTE
 app.use('/v1/feeds', feedsRoute);
+//  FEEDS ROUTE
+app.use('/v1/notifications', notificationsRoute);
 
 module.exports = app;

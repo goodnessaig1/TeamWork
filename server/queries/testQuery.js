@@ -74,3 +74,28 @@
 // LEFT JOIN users u2 ON u2.id = c.author_id
 // ORDER BY c.created_at DESC
 // `;
+// CREATE TABLE IF NOT EXISTS article_notifications (
+//             id SERIAL PRIMARY KEY,
+//             post_author_id INTEGER NOT NULL,
+//             article_id INTEGER NOT NULL,
+//             comment VARCHAR  NULL,
+//             like VARCHAR  NULL,
+//             author_names VARCHAR NOT NULL,
+//             created_at timestamp with time zone NOT NULL,
+//             author_id INTEGER NOT NULL,
+//             read BOOLEAN DEFAULT false,
+//             FOREIGN KEY (post_author_id)
+//             REFERENCES users (id));
+
+// SELECT n.created_at as date,a.article as post, n.comment as comment, n.article_like as like, read, CONCAT(u2.first_name, ' ', u2.last_name) as notifications_author
+// FROM article_notifications n
+// LEFT JOIN articles a ON a.id = n.article_id
+// LEFT JOIN users u2 ON u2.id = n.author_id
+// where n.post_author_id =2
+// UNION ALL
+// SELECT n.created_at as date,g.image_url as post, n.comment as comment, n.gif_like as like, read, CONCAT(u2.first_name, ' ', u2.last_name) as notifications_author
+// FROM gif_notifications n
+// LEFT JOIN gifs g ON g.id = n.gif_id
+// LEFT JOIN users u2 ON u2.id = n.author_id
+// where n.post_author_id =2
+// order by date desc

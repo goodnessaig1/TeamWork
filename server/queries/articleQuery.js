@@ -1,7 +1,7 @@
 const createNewArticle = `INSERT INTO articles (title, article, created_at, updated_at, category_id, user_id) 
         VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 const selectCategory = `SELECT * FROM categories WHERE category_id =$1`;
-
+const selectUserDetails = 'SELECT * FROM users WHERE id =$1';
 // FLAG QUERY
 const selectArticle = 'SELECT * FROM articles WHERE id =$1';
 const flag =
@@ -40,4 +40,5 @@ module.exports = {
   selectIfUserLike,
   createLike,
   deleteLike,
+  selectUserDetails,
 };

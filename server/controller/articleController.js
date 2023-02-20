@@ -20,16 +20,29 @@ class ArticleController {
       }
       const createdAt = DateTime.now();
       const updatedAt = DateTime.now();
+      const user = await pool.query(queries.selectUserDetails, [userId]);
       const values = [title, article, createdAt, updatedAt, categoryId, userId];
       const articles = await pool.query(queries.createNewArticle, values);
       return res.status(201).json({
         status: 'success',
+        message: 'Article successfully posted',
         data: {
-          message: 'Article successfully posted',
-          articleId: articles.rows[0].id,
-          createdAt,
-          title,
-          catigoryName: category.rows[0].category_name,
+          author_jobrole: user.rows[0].jobrole,
+          comment: null,
+          comment_author: null,
+          comment_author_last_name: null,
+          comment_author_profile: null,
+          comment_id: null,
+          date: null,
+          isliked: false,
+          number_of_commennt: '0',
+          number_of_likes: '0',
+          post: articles.rows[0].article,
+          post_author: `${user.rows[0].first_name} ${user.rows[0].last_name}`,
+          post_date: articles.rows[0].created_at,
+          postid: articles.rows[0].id,
+          profile_pix: user.rows[0].profile_pix,
+          title: articles.rows[0].title,
         },
       });
     } catch (err) {
@@ -152,6 +165,7 @@ class ArticleController {
           createdAt: article.rows[0].created_at,
           title: article.rows[0].title,
           article: article.rows[0].article,
+          articleAuthor: article.rows[0].user_id,
           comments: comments.rows,
         },
       });

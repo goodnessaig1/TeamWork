@@ -32,17 +32,29 @@ class GifController {
       });
       const created_at = DateTime.now();
       const userId = req.user.userId;
+      const user = await pool.query(queries.selectUserDetails, [userId]);
       const values = [title, imageURL, publicId, created_at, userId];
       const images = await pool.query(queries.createNewGif, values);
       return res.status(201).send({
         status: 'success',
+        message: 'GIF image successfully posted',
         data: {
-          gifId: images.rows[0].id,
-          message: 'GIF image successfully posted',
-          createdAt: images.rows[0].created_at,
-          title: images.rows[0].title,
-          imageURL: images.rows[0].image_url,
-          userId: images.rows[0].user_id,
+          author_jobrole: user.rows[0].jobrole,
+          comment: null,
+          comment_author: null,
+          comment_author_last_name: null,
+          comment_author_profile: null,
+          comment_id: null,
+          date: null,
+          isliked: false,
+          number_of_commennt: '0',
+          number_of_likes: '0',
+          post: images.rows[0].image_url,
+          post_author: `${user.rows[0].first_name}${user.rows[0].last_name}`,
+          post_date: images.rows[0].created_at,
+          postid: images.rows[0].id,
+          profile_pix: user.rows[0].profile_pix,
+          title: title,
         },
       });
     } catch (err) {

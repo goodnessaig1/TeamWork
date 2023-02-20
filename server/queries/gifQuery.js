@@ -4,6 +4,7 @@ const selectGif = `SELECT * FROM gifs WHERE id = $1`;
 const deleteGif = `DELETE FROM gifs WHERE id = $1`;
 const selectAllGifs = 'SELECT * FROM gifs ORDER BY created_at DESC';
 const selectUser = `SELECT * FROM users WHERE id = $1`;
+const selectUserDetails = 'SELECT * FROM users WHERE id =$1';
 
 //   GIF COMMENT
 const createGifComment = `INSERT INTO gif_comment (gif_id, comment, author_id, created_at, user_name )VALUES ($1, $2, $3, $4, $5) RETURNING *`;
@@ -27,4 +28,5 @@ module.exports = {
   createLike,
   selectIfUserLike,
   deleteLike,
+  selectUserDetails,
 };
