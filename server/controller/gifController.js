@@ -35,27 +35,12 @@ class GifController {
       const user = await pool.query(queries.selectUserDetails, [userId]);
       const values = [title, imageURL, publicId, created_at, userId];
       const images = await pool.query(queries.createNewGif, values);
+      const gifId = images.rows[0].id;
+      const newGif = await pool.query(queries.getUpdatedGif, [userId, gifId]);
       return res.status(201).send({
         status: 'success',
         message: 'GIF image successfully posted',
-        data: {
-          author_jobrole: user.rows[0].jobrole,
-          comment: null,
-          comment_author: null,
-          comment_author_last_name: null,
-          comment_author_profile: null,
-          comment_id: null,
-          date: null,
-          isliked: false,
-          number_of_commennt: '0',
-          number_of_likes: '0',
-          post: images.rows[0].image_url,
-          post_author: `${user.rows[0].first_name}${user.rows[0].last_name}`,
-          post_date: images.rows[0].created_at,
-          postid: images.rows[0].id,
-          profile_pix: user.rows[0].profile_pix,
-          title: title,
-        },
+        data: newGif.rows[0],
       });
     } catch (err) {
       res.status(500).send({

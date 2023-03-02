@@ -30,6 +30,10 @@ class LikesController {
     ];
     if (!like.rowCount > 0) {
       let newLike = await pool.query(queries.createLike, values);
+      const article = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
       if (userId !== postAuthor) {
         await pool.query(
           notificationQuery.createArticleLikeNotification,
@@ -38,12 +42,17 @@ class LikesController {
       }
       return res.json({
         newLike: newLike.rows,
+        data: article.rows[0],
       });
     } else {
       const deleteLike = await pool.query(queries.deleteLike, [userId]);
+      const article = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
       return res.json({
         deleted: 'Like has been deleted',
-        deleteLike,
+        data: article.rows[0],
       });
     }
   }
@@ -71,6 +80,7 @@ class LikesController {
     ];
     if (!like.rowCount > 0) {
       let newLike = await pool.query(gifQuery.createLike, values);
+      const gif = await pool.query(gifQuery.getUpdatedGif, [userId, gifId]);
       if (userId !== postAuthor) {
         await pool.query(
           notificationQuery.createGifLikeNotification,
@@ -79,12 +89,14 @@ class LikesController {
       }
       return res.json({
         newLike: newLike.rows,
+        data: gif.rows[0],
       });
     } else {
-      const deleteLike = await pool.query(gifQuery.deleteLike, [userId]);
+      await pool.query(gifQuery.deleteLike, [userId]);
+      const gif = await pool.query(gifQuery.getUpdatedGif, [userId, gifId]);
       return res.json({
         deleted: 'Like has been deleted',
-        deleteLike,
+        gif: gif.rows[0],
       });
     }
   }

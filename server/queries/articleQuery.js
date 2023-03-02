@@ -23,9 +23,19 @@ const createComment =
 // ========= ARTICLE LIKES
 const selectIfUserLike = `SELECT * FROM articleLikes where article_id = $1 and author_id = $2`;
 const createLike =
-  'INSERT INTO articleLikes (article_id, author_id) VALUES ($1, $2)RETURNING * ';
+  'INSERT INTO articleLikes (article_id, author_id)  VALUES ($1, $2) ';
 const deleteLike = `DELETE FROM articleLikes where author_id = $1`;
-
+const getUpdatedArticle = `
+SELECT a.article as post, a.title as title,a.created_at as post_date, a.id as postId,c.id as comment_id, c.comment as comment, c.created_at as date, CONCAT(u.first_name, ' ', u.last_name) as post_author,u2.profile_pix as comment_author_profile, u2.first_name as comment_author,u2.last_name as comment_author_last_name,u.jobrole as author_jobrole, u.profile_pix,
+(SELECT COUNT(article_id) FROM articles_comments WHERE article_id = a.id) as number_of_commennt,
+(SELECT COUNT(article_id) FROM articleLikes WHERE article_id = a.id) as number_of_likes,
+EXISTS(SELECT * FROM articleLikes l WHERE l.article_id = a.id and l.author_id = $1) AS isLiked
+FROM articles a 
+LEFT JOIN articles_comments c ON c.article_id = a.id
+LEFT JOIN users u ON u.id = a.user_id
+LEFT JOIN users u2 ON u2.id = c.author_id
+WHERE a.id= $2
+`;
 module.exports = {
   createNewArticle,
   selectCategory,
@@ -41,4 +51,5 @@ module.exports = {
   createLike,
   deleteLike,
   selectUserDetails,
+  getUpdatedArticle,
 };

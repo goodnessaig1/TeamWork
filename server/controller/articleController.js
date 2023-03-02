@@ -23,27 +23,16 @@ class ArticleController {
       const user = await pool.query(queries.selectUserDetails, [userId]);
       const values = [title, article, createdAt, updatedAt, categoryId, userId];
       const articles = await pool.query(queries.createNewArticle, values);
+      const articleId = articles.rows[0].id;
+      const newArticle = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
+
       return res.status(201).json({
         status: 'success',
         message: 'Article successfully posted',
-        data: {
-          author_jobrole: user.rows[0].jobrole,
-          comment: null,
-          comment_author: null,
-          comment_author_last_name: null,
-          comment_author_profile: null,
-          comment_id: null,
-          date: null,
-          isliked: false,
-          number_of_commennt: '0',
-          number_of_likes: '0',
-          post: articles.rows[0].article,
-          post_author: `${user.rows[0].first_name} ${user.rows[0].last_name}`,
-          post_date: articles.rows[0].created_at,
-          postid: articles.rows[0].id,
-          profile_pix: user.rows[0].profile_pix,
-          title: articles.rows[0].title,
-        },
+        data: newArticle.rows[0],
       });
     } catch (err) {
       res.status(500).send({
