@@ -45,7 +45,7 @@ class LikesController {
         data: article.rows[0],
       });
     } else {
-      const deleteLike = await pool.query(queries.deleteLike, [userId]);
+      await pool.query(queries.deleteLike, [userId]);
       const article = await pool.query(queries.getUpdatedArticle, [
         userId,
         articleId,

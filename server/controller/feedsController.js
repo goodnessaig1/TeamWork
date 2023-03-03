@@ -8,9 +8,11 @@ class FeedsController {
       const { offset, limit } = req.query;
       const values = [userId, limit || 10, offset || 0];
       const feeds = await pool.query(queries.getAllFeeds, values);
+      const totalRows = await pool.query(queries.totalRows);
       return res.status(200).json({
         status: 'Success',
         data: feeds.rows,
+        total: totalRows.rows[0],
       });
     } catch (err) {
       res.status(500).send({
