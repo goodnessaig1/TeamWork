@@ -32,7 +32,6 @@ class GifController {
       });
       const created_at = DateTime.now();
       const userId = req.user.userId;
-      const user = await pool.query(queries.selectUserDetails, [userId]);
       const values = [title, imageURL, publicId, created_at, userId];
       const images = await pool.query(queries.createNewGif, values);
       const gifId = images.rows[0].id;

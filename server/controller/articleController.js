@@ -12,6 +12,12 @@ class ArticleController {
       const { title, article, categoryId } = req.body;
       const category = await pool.query(queries.selectCategory, [categoryId]);
       const { userId } = req.user;
+      if (categoryId === undefined) {
+        return res.status(417).json({
+          status: 'Failed',
+          message: 'Please add a category',
+        });
+      }
       if (category.rows.length === 0) {
         return res.status(404).json({
           status: 'Failed',
@@ -20,7 +26,6 @@ class ArticleController {
       }
       const createdAt = DateTime.now();
       const updatedAt = DateTime.now();
-      const user = await pool.query(queries.selectUserDetails, [userId]);
       const values = [title, article, createdAt, updatedAt, categoryId, userId];
       const articles = await pool.query(queries.createNewArticle, values);
       const articleId = articles.rows[0].id;
