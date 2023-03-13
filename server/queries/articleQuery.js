@@ -15,8 +15,11 @@ const getSingleArticle = `SELECT * FROM articles WHERE id = $1`;
 const deleteSingleArticle = `DELETE FROM articles WHERE id = $1`;
 
 // ARTCLE COMMENT QUERY
-const getArticleComment =
-  'SELECT articles_comments.article_id as commentId, comment, author_id as authorId FROM articles_comments WHERE article_id = $1';
+const getArticleComment = `SELECT c.article_id as post_id, c.comment, c.created_at as date, c.author_id as authorId, CONCAT(u.first_name, ' ', u.last_name) as post_author,
+u.profile_pix as comment_author_profile 
+FROM articles_comments c
+LEFT JOIN users u ON u.id = c.author_id
+WHERE article_id = $1 ORDER BY c.created_at ASC`;
 const createComment =
   'INSERT INTO articles_comments (comment, created_at, article_id, flagged, author_id) VALUES ($1, $2, $3, $4, $5)RETURNING * ';
 
@@ -35,6 +38,7 @@ LEFT JOIN articles_comments c ON c.article_id = a.id
 LEFT JOIN users u ON u.id = a.user_id
 LEFT JOIN users u2 ON u2.id = c.author_id
 WHERE a.id= $2
+ORDER BY post_date DESC, date DESC NULLS LAST
 `;
 module.exports = {
   createNewArticle,

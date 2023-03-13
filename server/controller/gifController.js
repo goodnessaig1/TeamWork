@@ -101,7 +101,8 @@ class GifController {
   static async getSingleGif(req, res) {
     try {
       const { gifId } = req.params;
-      const gif = await pool.query(queries.selectGif, [gifId]);
+      const userId = req.user.userId;
+      const gif = await pool.query(queries.getUpdatedGif, [userId, gifId]);
       const gifComment = await pool.query(queries.getGifComments, [gifId]);
       if (gif.rows.length === 0) {
         return res.status(404).json({
@@ -112,10 +113,7 @@ class GifController {
       return res.status(200).json({
         status: 'success',
         data: {
-          id: gif.rows[0].id,
-          createdAt: gif.rows[0].created_at,
-          title: gif.rows[0].title,
-          url: gif.rows[0].image_url,
+          data: gif.rows[0],
           comments: gifComment.rows,
         },
       });

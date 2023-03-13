@@ -21,7 +21,8 @@ class ArticleCommentController {
       }
       const postAuthor = article.rows[0].user_id;
       const values = [comment, createdAt, articleId, flagged, userId];
-      const articleComment = await pool.query(queries.createComment, values);
+      await pool.query(queries.createComment, values);
+
       const notificationValues = [
         articleId,
         createdAt,
@@ -29,21 +30,27 @@ class ArticleCommentController {
         userId,
         commentNotification || 'commented on your post',
       ];
+
       if (userId !== postAuthor) {
         await pool.query(
           notificationQuery.createArticleNotification,
           notificationValues
         );
       }
+      const getArticleData = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
+      const articleComment = await pool.query(queries.getArticleComment, [
+        articleId,
+      ]);
+      const lastIndex = articleComment.rowCount - 1;
       return res.status(201).json({
         status: 'success',
         data: {
           message: 'Comment Successfully created',
-          createdAt: createdAt,
-          articleTitle: article.rows[0].title,
-          article: article.rows[0].article,
-          comment: comment,
-          commentId: articleComment.rows[0].id,
+          data: getArticleData.rows[0],
+          comment: articleComment.rows[lastIndex],
         },
       });
     } catch (err) {

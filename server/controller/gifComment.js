@@ -25,7 +25,7 @@ class gifController {
       const user = await pool.query(queries.selectUser, [userId]);
       const userName = user.rows[0].first_name;
       const values = [gifId, comment, userId, createdAt, userName];
-      const gifComment = await pool.query(queries.createGifComment, values);
+      await pool.query(queries.createGifComment, values);
       const notificationValues = [
         gifId,
         createdAt,
@@ -39,15 +39,18 @@ class gifController {
           notificationValues
         );
       }
+      const updatedGif = await pool.query(queries.getUpdatedGif, [
+        userId,
+        gifId,
+      ]);
+      const gifComment = await pool.query(queries.getGifComments, [gifId]);
+      const lastIndex = gifComment.rowCount - 1;
       return res.status(201).json({
         status: 'success',
         data: {
           message: 'GIF-COMMENT Successfully created',
-          createdAt: createdAt,
-          gifTitle: gif.rows[0].title,
-          comment: comment,
-          userName: userName,
-          commentId: gifComment.rows[0].id,
+          data: updatedGif.rows[0],
+          comment: gifComment.rows[lastIndex],
         },
       });
     } catch (err) {

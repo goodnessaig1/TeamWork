@@ -152,14 +152,15 @@ class ArticleController {
           error: 'Article with the specified articleId NOT found',
         });
       }
+      const userId = req.user.userId;
+      const articleData = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
       return res.status(200).json({
         status: 'success',
         data: {
-          id: article.rows[0].id,
-          createdAt: article.rows[0].created_at,
-          title: article.rows[0].title,
-          article: article.rows[0].article,
-          articleAuthor: article.rows[0].user_id,
+          data: articleData.rows[0],
           comments: comments.rows,
         },
       });

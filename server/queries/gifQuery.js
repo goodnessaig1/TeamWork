@@ -8,8 +8,11 @@ const selectUserDetails = 'SELECT * FROM users WHERE id =$1';
 
 //   GIF COMMENT
 const createGifComment = `INSERT INTO gif_comment (gif_id, comment, author_id, created_at, user_name )VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-const getGifComments =
-  'SELECT gif_comment.gif_id as commentid, comment, gif_comment.created_at as createdat, gif_comment.author_id as userauthorId FROM gif_comment WHERE gif_id = $1 ORDER BY created_at DESC';
+const getGifComments = `SELECT c.gif_id as post_id, c.comment, c.created_at as date, c.author_id as authorId, CONCAT(u.first_name, ' ', u.last_name) as post_author,
+u.profile_pix as comment_author_profile 
+FROM gif_comment c
+LEFT JOIN users u ON u.id = c.author_id
+WHERE gif_id = $1 ORDER BY c.created_at ASC`;
 
 //  GIF LIKES
 const selectIfUserLike = `SELECT * FROM gif_likes where gif_id = $1 and author_id = $2`;
@@ -25,6 +28,7 @@ LEFT JOIN gif_comment c ON c.gif_id = g.id
 LEFT JOIN users u ON u.id = g.user_id
 LEFT JOIN users u2 ON u2.id = c.author_id
 WHERE g.id= $2
+ORDER BY post_date DESC, date DESC NULLS LAST
 `;
 
 module.exports = {
