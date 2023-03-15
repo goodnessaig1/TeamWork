@@ -96,7 +96,7 @@ class LikesController {
       const gif = await pool.query(gifQuery.getUpdatedGif, [userId, gifId]);
       return res.json({
         deleted: 'Like has been deleted',
-        gif: gif.rows[0],
+        data: gif.rows[0],
       });
     }
   }
