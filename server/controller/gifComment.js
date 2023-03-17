@@ -44,13 +44,12 @@ class gifController {
         gifId,
       ]);
       const gifComment = await pool.query(queries.getGifComments, [gifId]);
-      const lastIndex = gifComment.rowCount - 1;
       return res.status(201).json({
         status: 'success',
         data: {
           message: 'GIF-COMMENT Successfully created',
           data: updatedGif.rows[0],
-          comment: gifComment.rows[lastIndex],
+          comment: gifComment.rows[0],
         },
       });
     } catch (err) {

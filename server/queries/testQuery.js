@@ -99,3 +99,120 @@
 // LEFT JOIN users u2 ON u2.id = n.author_id
 // where n.post_author_id =2
 // order by date desc
+// Get all posts with comments and likes
+//   static async getAllFeeds(req, res) {
+//     try {
+//       const userId = req.user.userId;
+//       const { offset, limit } = req.query;
+//       const values = [userId, limit || 10, offset || 0];
+//       const { rows } = await pool.query(queries.getAllFeeds, values);
+
+//       // Create a map to group the rows by post ID
+//       const postMap = new Map();
+//       rows.forEach((row) => {
+//         const {
+//           postid,
+//           title,
+//           post,
+//           post_date,
+//           comment_id,
+//           comment_body,
+//           comment_created_at,
+//           post_author,
+//           profile_pix,
+//           jobrole,
+//           comment_author,
+//           comment_author_profile,
+//           number_of_comment,
+//           number_of_likes,
+//           liked,
+//         } = row;
+//         const postData = postMap.get(postid) || {
+//           postid,
+//           title,
+//           post,
+//           post_date,
+//           post_author,
+//           profile_pix,
+//           jobrole,
+//           number_of_comment,
+//           number_of_likes,
+//           liked,
+//           comments: [],
+//         };
+//         if (comment_id) {
+//           postData.comments.push({
+//             id: comment_id,
+//             body: comment_body,
+//             created_at: comment_created_at,
+//             comment_author: comment_author,
+//             comment_author_profile: comment_author_profile,
+//           });
+//         }
+//         postMap.set(postid, postData);
+//       });
+
+//       // Convert the map to an array of posts
+//       const totalRows = await pool.query(queries.totalRows);
+//       const posts = Array.from(postMap.values());
+//       return res.status(200).json({
+//         status: 'Success',
+//         data: posts,
+//         total: totalRows.rows[0],
+//       });
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send('Server error');
+//     }
+//   }
+// SELECT
+//         a.id as postid,
+//         a.title as title,
+//         a.article as post,
+//         a.created_at as post_date,
+//         c.id AS comment_id,
+//         c.comment AS comment_body,
+//         c.created_at AS comment_created_at,
+//         CONCAT(u.first_name, ' ', u.last_name) as post_author,
+//         u.profile_pix as profile_pix,
+//         u.jobrole as jobrole,
+// 		    CONCAT(u2.first_name, ' ', u2.last_name) as comment_author,
+//         u2.profile_pix as comment_author_profile,
+//         (SELECT COUNT(article_id) FROM articles_comments WHERE article_id = a.id) as number_of_comment,
+//         (SELECT COUNT(article_id) FROM articleLikes WHERE article_id = a.id) as number_of_likes,
+//         EXISTS(SELECT * FROM articleLikes l WHERE l.article_id = a.id and l.author_id = $1) AS liked
+//       FROM
+//         articles a
+//         LEFT JOIN articles_comments c ON a.id = c.article_id
+//         LEFT JOIN users u ON u.id = a.user_id
+//         LEFT JOIN users u2 ON u2.id = c.author_id
+
+//         UNION ALL
+
+// SELECT
+//         g.id as postid,
+//         g.title as title,
+//         g.image_url as post,
+//         g.created_at as post_date,
+//         c.id AS comment_id,
+//         c.comment AS comment_body,
+//         c.created_at AS comment_created_at,
+//         CONCAT(u.first_name, ' ', u.last_name) as post_author,
+//         u.profile_pix as profile_pix,
+//         u.jobrole as jobrole,
+// 		    CONCAT(u2.first_name, ' ', u2.last_name) as comment_author,
+//         u2.profile_pix as comment_author_profile,
+//         (SELECT COUNT(gif_id) FROM gif_comment WHERE gif_id = g.id) as number_of_comment,
+//         (SELECT COUNT(gif_id) FROM gif_likes WHERE gif_id = g.id) as number_of_likes,
+//         EXISTS(SELECT * FROM gif_likes l WHERE l.gif_id = g.id and l.author_id = $1) AS liked
+//       FROM
+//         gifs g
+//         LEFT JOIN gif_comment c ON c.gif_id = g.id
+//         LEFT JOIN users u ON u.id = g.user_id
+//         LEFT JOIN users u2 ON u2.id = c.author_id
+//       ORDER BY
+//         post_date DESC,
+//         comment_created_at ASC
+//       LIMIT $2 OFFSET $3
+
+//         `;

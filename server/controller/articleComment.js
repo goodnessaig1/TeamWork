@@ -44,13 +44,12 @@ class ArticleCommentController {
       const articleComment = await pool.query(queries.getArticleComment, [
         articleId,
       ]);
-      const lastIndex = articleComment.rowCount - 1;
       return res.status(201).json({
         status: 'success',
         data: {
           message: 'Comment Successfully created',
           data: getArticleData.rows[0],
-          comment: articleComment.rows[lastIndex],
+          comment: articleComment.rows[0],
         },
       });
     } catch (err) {
