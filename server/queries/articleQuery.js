@@ -1,5 +1,5 @@
-const createNewArticle = `INSERT INTO articles (title, article, created_at, updated_at, category_id, user_id) 
-        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
+const createNewArticle = `INSERT INTO articles (title, article, created_at, updated_at, category_id, user_id, color_id) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 const selectCategory = `SELECT * FROM categories WHERE category_id =$1`;
 const selectUserDetails = 'SELECT * FROM users WHERE id =$1';
 // FLAG QUERY
@@ -34,6 +34,7 @@ const getUpdatedArticle = `
         a.title as title, 
         a.article as post, 
         a.created_at as post_date, 
+        col.color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
         u.profile_pix as profile,
         u.jobrole as jobrole,
@@ -60,6 +61,7 @@ const getUpdatedArticle = `
     FROM 
          articles a
         LEFT JOIN users u ON u.id = a.user_id
+        LEFT JOIN colors col ON col.id = a.color_id
     WHERE a.id= $2
 `;
 module.exports = {

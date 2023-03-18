@@ -9,7 +9,7 @@ require('dotenv').config();
 class ArticleController {
   static async createArticle(req, res) {
     try {
-      const { title, article, categoryId } = req.body;
+      const { title, article, categoryId, colorId } = req.body;
       const category = await pool.query(queries.selectCategory, [categoryId]);
       const { userId } = req.user;
       if (categoryId === undefined) {
@@ -26,7 +26,15 @@ class ArticleController {
       }
       const createdAt = DateTime.now();
       const updatedAt = DateTime.now();
-      const values = [title, article, createdAt, updatedAt, categoryId, userId];
+      const values = [
+        title,
+        article,
+        createdAt,
+        updatedAt,
+        categoryId,
+        userId,
+        colorId,
+      ];
       const articles = await pool.query(queries.createNewArticle, values);
       const articleId = articles.rows[0].id;
       const newArticle = await pool.query(queries.getUpdatedArticle, [

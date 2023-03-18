@@ -3,7 +3,8 @@ SELECT
     postid, 
     title, 
     post, 
-    post_date, 
+    post_date,
+	color,
     post_author, 
     profile, 
     jobrole, 
@@ -16,7 +17,8 @@ FROM
         a.id as postid, 
         a.title as title, 
         a.article as post, 
-        a.created_at as post_date, 
+        a.created_at as post_date,
+	 	col.color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
         u.profile_pix as profile,
         u.jobrole as jobrole,
@@ -43,12 +45,14 @@ FROM
     FROM 
         articles a
         LEFT JOIN users u ON u.id = a.user_id
+	 	LEFT JOIN colors col ON col.id = a.color_id
     UNION ALL
     SELECT
         g.id as postid, 
         g.title as title, 
         g.image_url as post, 
         g.created_at as post_date, 
+	 	NULL as color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
         u.profile_pix as profile,
         u.jobrole as jobrole,

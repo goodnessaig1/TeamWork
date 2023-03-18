@@ -3,6 +3,7 @@ const fileupload = require('express-fileupload');
 const users = require('./server/routes/adminRoute');
 const gifRoutes = require('./server/routes/gifRoute');
 const categoryRoutes = require('./server/routes/categoryRoute');
+const colorRoutes = require('./server/routes/colorRoute');
 const articeRoute = require('./server/routes/articleRoute');
 const feedsRoute = require('./server/routes/feedRoute');
 const notificationsRoute = require('./server/routes/notificationsRoute');
@@ -52,6 +53,9 @@ app.use('/v1/gifs', gifRoutes);
 
 //  CATEGORY ROUTE
 app.use('/v1/categories', categoryRoutes);
+
+//  COLOR ROUTE
+app.use('/v1/colors', colorRoutes);
 
 //  ARTICLE ROUTE
 app.use('/v1/articles', articeRoute);
