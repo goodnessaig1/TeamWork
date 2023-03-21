@@ -10,7 +10,7 @@ require('dotenv').config();
 class LikesController {
   static async articleLikes(req, res) {
     const { articleId } = req.params;
-    const { notificationMessage } = req.body;
+    // const { notificationMessage } = req.body;
     const userId = req.user.userId;
     const article = await pool.query(queries.selectArticle, [articleId]);
     if (!article.rowCount > 0)
@@ -21,25 +21,25 @@ class LikesController {
     const postAuthor = article.rows[0].user_id;
     const values = [articleId, userId];
     const like = await pool.query(queries.selectIfUserLike, values);
-    const notificationValues = [
-      articleId,
-      createdAt,
-      postAuthor,
-      userId,
-      notificationMessage || 'Liked your post..',
-    ];
+    // const notificationValues = [
+    //   articleId,
+    //   createdAt,
+    //   postAuthor,
+    //   userId,
+    //   notificationMessage || 'Liked your post..',
+    // ];
     if (!like.rowCount > 0) {
       let newLike = await pool.query(queries.createLike, values);
       const article = await pool.query(queries.getUpdatedArticle, [
         userId,
         articleId,
       ]);
-      if (userId !== postAuthor) {
-        await pool.query(
-          notificationQuery.createArticleNotification,
-          notificationValues
-        );
-      }
+      // if (userId !== postAuthor) {
+      //   await pool.query(
+      //     notificationQuery.createArticleNotification,
+      //     notificationValues
+      //   );
+      // }
       return res.json({
         newLike: newLike.rows,
         data: article.rows[0],
@@ -59,7 +59,7 @@ class LikesController {
 
   // ========= GIF LIKE
   static async gifLike(req, res) {
-    const { notificationMessage } = req.body;
+    // const { notificationMessage } = req.body;
     const { gifId } = req.params;
     const userId = req.user.userId;
     const gif = await pool.query(gifQuery.selectGif, [gifId]);
@@ -71,22 +71,22 @@ class LikesController {
     const postAuthor = gif.rows[0].user_id;
     const values = [gifId, userId];
     const like = await pool.query(gifQuery.selectIfUserLike, values);
-    const notificationValues = [
-      gifId,
-      createdAt,
-      postAuthor,
-      userId,
-      notificationMessage || 'Liked your photo..',
-    ];
+    // const notificationValues = [
+    //   gifId,
+    //   createdAt,
+    //   postAuthor,
+    //   userId,
+    //   notificationMessage || 'Liked your photo..',
+    // ];
     if (!like.rowCount > 0) {
       let newLike = await pool.query(gifQuery.createLike, values);
       const gif = await pool.query(gifQuery.getUpdatedGif, [userId, gifId]);
-      if (userId !== postAuthor) {
-        await pool.query(
-          notificationQuery.createGifNotification,
-          notificationValues
-        );
-      }
+      // if (userId !== postAuthor) {
+      //   await pool.query(
+      //     notificationQuery.createGifNotification,
+      //     notificationValues
+      //   );
+      // }
       return res.json({
         newLike: newLike.rows,
         data: gif.rows[0],
