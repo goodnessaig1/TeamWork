@@ -10,7 +10,7 @@ class gifController {
   //    GIF COMMENT
   static async createComment(req, res) {
     try {
-      const { comment, commentNotification } = req.body;
+      const { comment, notificationMessage } = req.body;
       const { gifId } = req.params;
       const createdAt = DateTime.now();
       const userId = req.user.userId;
@@ -26,18 +26,18 @@ class gifController {
       const userName = user.rows[0].first_name;
       const values = [gifId, comment, userId, createdAt, userName];
       await pool.query(queries.createGifComment, values);
-      const notificationValues = [
-        gifId,
-        createdAt,
-        postAuthor,
-        userId,
-        commentNotification || 'commented on your photo',
-      ];
+      // const notificationValues = [
+      //   gifId,
+      //   createdAt,
+      //   postAuthor,
+      //   userId,
+      //   notificationMessage || 'commented on your photo',
+      // ];
       if (userId !== postAuthor) {
-        await pool.query(
-          notificationQuery.createGifNotification,
-          notificationValues
-        );
+        // await pool.query(
+        // notificationQuery.createGifNotification,
+        // notificationValues
+        // );
       }
       const updatedGif = await pool.query(queries.getUpdatedGif, [
         userId,

@@ -8,7 +8,7 @@ require('../models/notificationModel')();
 class ArticleCommentController {
   static async createComment(req, res) {
     try {
-      const { comment, flagged, commentNotification } = req.body;
+      const { comment, flagged, notificationMessage } = req.body;
       const { articleId } = req.params;
       const createdAt = DateTime.now();
       const userId = req.user.userId;
@@ -28,15 +28,15 @@ class ArticleCommentController {
         createdAt,
         postAuthor,
         userId,
-        commentNotification || 'commented on your post',
+        notificationMessage || 'commented on your post',
       ];
 
-      if (userId !== postAuthor) {
-        await pool.query(
-          notificationQuery.createArticleNotification,
-          notificationValues
-        );
-      }
+      // if (userId !== postAuthor) {
+      //   await pool.query(
+      //     notificationQuery.createArticleNotification,
+      //     notificationValues
+      //   );
+      // }
       const getArticleData = await pool.query(queries.getUpdatedArticle, [
         userId,
         articleId,
