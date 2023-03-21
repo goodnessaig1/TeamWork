@@ -34,12 +34,12 @@ class LikesController {
         userId,
         articleId,
       ]);
-      // if (userId !== postAuthor) {
-      //   await pool.query(
-      //     notificationQuery.createArticleNotification,
-      //     notificationValues
-      //   );
-      // }
+      if (userId !== postAuthor) {
+        await pool.query(
+          notificationQuery.createArticleNotification,
+          notificationValues
+        );
+      }
       return res.json({
         newLike: newLike.rows,
         data: article.rows[0],
@@ -81,12 +81,12 @@ class LikesController {
     if (!like.rowCount > 0) {
       let newLike = await pool.query(gifQuery.createLike, values);
       const gif = await pool.query(gifQuery.getUpdatedGif, [userId, gifId]);
-      // if (userId !== postAuthor) {
-      //   await pool.query(
-      //     notificationQuery.createGifNotification,
-      //     notificationValues
-      //   );
-      // }
+      if (userId !== postAuthor) {
+        await pool.query(
+          notificationQuery.createGifNotification,
+          notificationValues
+        );
+      }
       return res.json({
         newLike: newLike.rows,
         data: gif.rows[0],

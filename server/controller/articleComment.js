@@ -31,12 +31,12 @@ class ArticleCommentController {
         notificationMessage || 'commented on your post',
       ];
 
-      // if (userId !== postAuthor) {
-      //   await pool.query(
-      //     notificationQuery.createArticleNotification,
-      //     notificationValues
-      //   );
-      // }
+      if (userId !== postAuthor) {
+        await pool.query(
+          notificationQuery.createArticleNotification,
+          notificationValues
+        );
+      }
       const getArticleData = await pool.query(queries.getUpdatedArticle, [
         userId,
         articleId,
