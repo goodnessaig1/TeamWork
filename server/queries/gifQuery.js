@@ -26,6 +26,7 @@ const getUpdatedGif = `
         g.image_url as post, 
         g.created_at as post_date, 
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
+        u.id as user_id,
         u.profile_pix as profile,
         u.jobrole as jobrole,
         (SELECT COUNT(gif_id) FROM gif_comment  WHERE gif_id = g.id) as number_of_comment,

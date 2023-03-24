@@ -9,7 +9,7 @@ const flag =
 
 //UPDATE ARTICLE QUERY
 const updateArticle =
-  'UPDATE articles SET title = $1, article = $2, updated_at = $3 WHERE id = $4  RETURNING *';
+  'UPDATE articles SET title = $1, article = $2, updated_at = $3,color_id = $4 WHERE id = $5  RETURNING *';
 const getAllArticles = `SELECT articles.id, title,user_id, article, first_name as username, category_id, articles.created_at, articles.updated_at, category_id, flagged, flagged_at FROM articles INNER JOIN users ON articles.user_id = users.id ORDER BY updated_at DESC`;
 const getSingleArticle = `SELECT * FROM articles WHERE id = $1`;
 const deleteSingleArticle = `DELETE FROM articles WHERE id = $1`;
@@ -36,6 +36,7 @@ const getUpdatedArticle = `
         a.created_at as post_date, 
         col.color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
+        u.id as user_id,
         u.profile_pix as profile,
         u.jobrole as jobrole,
         (SELECT COUNT(article_id) FROM articles_comments  WHERE article_id = a.id) as number_of_comment,

@@ -49,6 +49,27 @@ class categoryController {
       });
     }
   }
+
+  static async deleteSingleColor(req, res) {
+    try {
+      const { colorId } = req.params;
+      const color = await pool.query(queries.selectSingleColor, [colorId]);
+      if (color.rowCount === 0)
+        return res.status(404).json({ message: 'Color Not Found' });
+      await pool.query(queries.deleteSingleColor, [colorId]);
+      return res.status(202).json({
+        status: 'success',
+        data: {
+          message: 'Color succesfully deleted',
+        },
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
 }
 
 module.exports = categoryController;

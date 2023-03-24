@@ -5,7 +5,8 @@ SELECT
     post, 
     post_date,
 	color,
-    post_author, 
+    post_author,
+	user_id,
     profile, 
     jobrole, 
     number_of_comment, 
@@ -20,6 +21,7 @@ FROM
         a.created_at as post_date,
 	 	col.color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
+	 	u.id as user_id,
         u.profile_pix as profile,
         u.jobrole as jobrole,
         (SELECT COUNT(article_id) FROM articles_comments WHERE article_id = a.id) as number_of_comment,
@@ -54,6 +56,7 @@ FROM
         g.created_at as post_date, 
 	 	NULL as color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
+	 	u.id as user_id,
         u.profile_pix as profile,
         u.jobrole as jobrole,
         (SELECT COUNT(gif_id) FROM gif_comment  WHERE gif_id = g.id) as number_of_comment,
@@ -85,6 +88,7 @@ ORDER BY
 LIMIT 
     $2 OFFSET $3
 `;
+
 const totalRows = `
 SELECT 
   (SELECT COUNT(*) FROM articles) + 

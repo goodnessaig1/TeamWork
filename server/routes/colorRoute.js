@@ -4,6 +4,12 @@ const isAdmin = require('../middleware/admin');
 const authorization = require('../middleware/authorization');
 
 router.post('/', authorization, isAdmin, controller.createColor);
+router.delete(
+  '/:colorId',
+  authorization,
+  isAdmin,
+  controller.deleteSingleColor
+);
 
 router.get('/', authorization, controller.getAllColors);
 

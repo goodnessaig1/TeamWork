@@ -96,14 +96,15 @@ class ArticleController {
   static async updateArticle(req, res) {
     try {
       const { articleId } = req.params;
-      const { title, article } = req.body;
+      const { title, article, colorId } = req.body;
       const user = await pool.query(queries.selectArticle, [articleId]);
+      const userId = req.user.userId;
       if (user.rowCount === 0)
         return res.status(404).json({
           status: 'Failed',
           message: 'Article Not Found',
         });
-      if (user.rows[0].user_id !== req.user.userId) {
+      if (user.rows[0].user_id !== userId) {
         return res.status(403).json({
           status: 'Failed',
           message: 'You cannot update this article',
@@ -114,9 +115,13 @@ class ArticleController {
         title,
         article,
         updatedAt,
+        colorId,
         articleId,
       ]);
-
+      const getArticleData = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
       return res.status(201).json({
         status: 'success',
         data: {
@@ -124,6 +129,7 @@ class ArticleController {
           title: updatedArticle.rows[0].title,
           article: updatedArticle.rows[0].article,
           updatedAt: updatedAt,
+          data: getArticleData.rows[0],
         },
       });
     } catch (err) {
