@@ -19,24 +19,25 @@ class ArticleCommentController {
           error: 'Article with the specified ID NOT found',
         });
       }
-      // const postAuthor = article.rows[0].user_id;
+      const postAuthor = article.rows[0].user_id;
       const values = [comment, createdAt, articleId, flagged, userId];
       await pool.query(queries.createComment, values);
 
-      // const notificationValues = [
-      //   articleId,
-      //   createdAt,
-      //   postAuthor,
-      //   userId,
-      //   notificationMessage || 'commented on your post',
-      // ];
+      const notificationValues = [
+        articleId,
+        createdAt,
+        postAuthor,
+        userId,
+        'comment',
+        notificationMessage || 'commented on your post',
+      ];
 
-      // if (userId !== postAuthor) {
-      //   await pool.query(
-      //     notificationQuery.createArticleNotification,
-      //     notificationValues
-      //   );
-      // }
+      if (userId !== postAuthor) {
+        await pool.query(
+          notificationQuery.createArticleNotification,
+          notificationValues
+        );
+      }
       const getArticleData = await pool.query(queries.getUpdatedArticle, [
         userId,
         articleId,
