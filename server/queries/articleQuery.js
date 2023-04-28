@@ -19,7 +19,7 @@ const getArticleComment = `SELECT c.article_id as post_id, c.comment, c.created_
 u.profile_pix as comment_author_profile 
 FROM articles_comments c
 LEFT JOIN users u ON u.id = c.author_id
-WHERE article_id = $1 ORDER BY c.created_at DESC`;
+WHERE article_id = $1 ORDER BY c.created_at ASC`;
 const createComment =
   'INSERT INTO articles_comments (comment, created_at, article_id, flagged, author_id) VALUES ($1, $2, $3, $4, $5)RETURNING * ';
 

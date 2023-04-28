@@ -12,7 +12,7 @@ const getGifComments = `SELECT c.gif_id as post_id, c.comment, c.created_at as d
 u.profile_pix as comment_author_profile 
 FROM gif_comment c
 LEFT JOIN users u ON u.id = c.author_id
-WHERE gif_id = $1 ORDER BY c.created_at DESC`;
+WHERE gif_id = $1 ORDER BY c.created_at ASC`;
 
 //  GIF LIKES
 const selectIfUserLike = `SELECT * FROM gif_likes where gif_id = $1 and author_id = $2`;
