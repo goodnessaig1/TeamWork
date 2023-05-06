@@ -10,8 +10,6 @@ module.exports = () => {
                     article_id INTEGER NOT NULL,
                     flagged BOOLEAN DEFAULT false NULL,
                     author_id INTEGER NOT NULL,
-                    image_ul CHARACTER VARYING,
-                    user_name  CHARACTER VARYING,
                     FOREIGN KEY (author_id) 
                     REFERENCES users (id)
                     )`);

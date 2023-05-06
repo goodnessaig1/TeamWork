@@ -9,9 +9,15 @@ require('dotenv').config();
 class ArticleController {
   static async createArticle(req, res) {
     try {
-      const { title, article, categoryId } = req.body;
+      const { title, article, categoryId, colorId } = req.body;
       const category = await pool.query(queries.selectCategory, [categoryId]);
       const { userId } = req.user;
+      if (categoryId === undefined) {
+        return res.status(417).json({
+          status: 'Failed',
+          message: 'Please add a category',
+        });
+      }
       if (category.rows.length === 0) {
         return res.status(404).json({
           status: 'Failed',
@@ -20,17 +26,26 @@ class ArticleController {
       }
       const createdAt = DateTime.now();
       const updatedAt = DateTime.now();
-      const values = [title, article, createdAt, updatedAt, categoryId, userId];
+      const values = [
+        title,
+        article,
+        createdAt,
+        updatedAt,
+        categoryId,
+        userId,
+        colorId,
+      ];
       const articles = await pool.query(queries.createNewArticle, values);
+      const articleId = articles.rows[0].id;
+      const newArticle = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
+
       return res.status(201).json({
         status: 'success',
-        data: {
-          message: 'Article successfully posted',
-          articleId: articles.rows[0].id,
-          createdAt,
-          title,
-          catigoryName: category.rows[0].category_name,
-        },
+        message: 'Article successfully posted',
+        data: newArticle.rows[0],
       });
     } catch (err) {
       res.status(500).send({
@@ -81,14 +96,15 @@ class ArticleController {
   static async updateArticle(req, res) {
     try {
       const { articleId } = req.params;
-      const { title, article } = req.body;
+      const { title, article, colorId } = req.body;
       const user = await pool.query(queries.selectArticle, [articleId]);
+      const userId = req.user.userId;
       if (user.rowCount === 0)
         return res.status(404).json({
           status: 'Failed',
           message: 'Article Not Found',
         });
-      if (user.rows[0].user_id !== req.user.userId) {
+      if (user.rows[0].user_id !== userId) {
         return res.status(403).json({
           status: 'Failed',
           message: 'You cannot update this article',
@@ -99,9 +115,13 @@ class ArticleController {
         title,
         article,
         updatedAt,
+        colorId,
         articleId,
       ]);
-
+      const getArticleData = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
       return res.status(201).json({
         status: 'success',
         data: {
@@ -109,6 +129,7 @@ class ArticleController {
           title: updatedArticle.rows[0].title,
           article: updatedArticle.rows[0].article,
           updatedAt: updatedAt,
+          data: getArticleData.rows[0],
         },
       });
     } catch (err) {
@@ -145,13 +166,15 @@ class ArticleController {
           error: 'Article with the specified articleId NOT found',
         });
       }
+      const userId = req.user.userId;
+      const articleData = await pool.query(queries.getUpdatedArticle, [
+        userId,
+        articleId,
+      ]);
       return res.status(200).json({
         status: 'success',
         data: {
-          id: article.rows[0].id,
-          createdAt: article.rows[0].created_at,
-          title: article.rows[0].title,
-          article: article.rows[0].article,
+          data: articleData.rows[0],
           comments: comments.rows,
         },
       });

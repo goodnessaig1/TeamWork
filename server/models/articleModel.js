@@ -16,7 +16,9 @@ module.exports = () => {
         category_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) 
         REFERENCES users (id)
-        )`);
+        );
+        ALTER TABLE articles ADD COLUMN IF NOT EXISTS color_id INTEGER;
+        `);
     } catch (error) {
       console.log(error);
     }

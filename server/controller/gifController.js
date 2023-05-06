@@ -34,16 +34,12 @@ class GifController {
       const userId = req.user.userId;
       const values = [title, imageURL, publicId, created_at, userId];
       const images = await pool.query(queries.createNewGif, values);
+      const gifId = images.rows[0].id;
+      const newGif = await pool.query(queries.getUpdatedGif, [userId, gifId]);
       return res.status(201).send({
         status: 'success',
-        data: {
-          gifId: images.rows[0].id,
-          message: 'GIF image successfully posted',
-          createdAt: images.rows[0].created_at,
-          title: images.rows[0].title,
-          imageURL: images.rows[0].image_url,
-          userId: images.rows[0].user_id,
-        },
+        message: 'GIF image successfully posted',
+        data: newGif.rows[0],
       });
     } catch (err) {
       res.status(500).send({
@@ -105,7 +101,8 @@ class GifController {
   static async getSingleGif(req, res) {
     try {
       const { gifId } = req.params;
-      const gif = await pool.query(queries.selectGif, [gifId]);
+      const userId = req.user.userId;
+      const gif = await pool.query(queries.getUpdatedGif, [userId, gifId]);
       const gifComment = await pool.query(queries.getGifComments, [gifId]);
       if (gif.rows.length === 0) {
         return res.status(404).json({
@@ -116,10 +113,7 @@ class GifController {
       return res.status(200).json({
         status: 'success',
         data: {
-          id: gif.rows[0].id,
-          createdAt: gif.rows[0].created_at,
-          title: gif.rows[0].title,
-          url: gif.rows[0].image_url,
+          data: gif.rows[0],
           comments: gifComment.rows,
         },
       });
