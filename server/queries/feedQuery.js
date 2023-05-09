@@ -7,12 +7,13 @@ SELECT
 	color,
     post_author,
 	user_id,
+    isAdmin,
     profile, 
     jobrole, 
     number_of_comment, 
     number_of_likes, 
     liked, 
-    comments 
+    comments
 FROM 
     (SELECT  
         a.id as postid, 
@@ -22,6 +23,7 @@ FROM
 	 	col.color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
 	 	u.id as user_id,
+        u.is_admin as isAdmin,
         u.profile_pix as profile,
         u.jobrole as jobrole,
         (SELECT COUNT(article_id) FROM articles_comments WHERE article_id = a.id) as number_of_comment,
@@ -31,7 +33,8 @@ FROM
             SELECT 
                 ac.id, 
                 ac.comment, 
-                ac.created_at as comment_date, 
+                ac.created_at as comment_date,
+                u.is_admin as isAdmin, 
                 CONCAT(u.first_name, ' ', u.last_name) as comment_author,
                 u.profile_pix as comment_author_profile
             FROM 
@@ -57,6 +60,7 @@ FROM
 	 	NULL as color,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
 	 	u.id as user_id,
+        u.is_admin as isAdmin,
         u.profile_pix as profile,
         u.jobrole as jobrole,
         (SELECT COUNT(gif_id) FROM gif_comment  WHERE gif_id = g.id) as number_of_comment,
@@ -66,7 +70,8 @@ FROM
             SELECT 
                 gc.id, 
                 gc.comment, 
-                gc.created_at as comment_date, 
+                gc.created_at as comment_date,
+                u.is_admin as isAdmin, 
                 CONCAT(u.first_name, ' ', u.last_name) as comment_author,
                 u.profile_pix as comment_author_profile
             FROM 

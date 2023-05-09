@@ -3,7 +3,7 @@ const queries = require('../queries/colorQuery');
 
 require('../models/colorModel')();
 
-class categoryController {
+class colorController {
   static async createColor(req, res) {
     try {
       const { colorName, color } = req.body;
@@ -72,4 +72,4 @@ class categoryController {
   }
 }
 
-module.exports = categoryController;
+module.exports = colorController;

@@ -169,7 +169,7 @@ class UserController {
     try {
       const users = await pool.query(queries.getAllUsers);
       return res.status(200).json({
-        status: 'Success',
+        status: 'success',
         data: users.rows,
       });
     } catch (err) {
@@ -328,6 +328,66 @@ class UserController {
       res.status(500).send({
         message: 'Server Error',
         error: err.message,
+      });
+    }
+  }
+
+  static async deleteUser(req, res) {
+    try {
+      const { userId } = req.params;
+      const user = await pool.query(queries.selectUserId, [userId]);
+      if (user.rowCount === 0) {
+        return res.status(404).json({ message: 'user not found' });
+      }
+      await pool.query(queries.deleteUser, [userId]);
+      return res.status(201).json({
+        status: 'success',
+        message: 'User Deleted',
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: error.message,
+      });
+    }
+  }
+
+  static async makeAdmin(req, res) {
+    try {
+      const { userId } = req.params;
+      const user = await pool.query(queries.selectUserId, [userId]);
+      if (user.rowCount === 0) {
+        return res.status(404).json({ message: 'user not found' });
+      }
+      const newAdmin = await pool.query(queries.makeAdmin, [userId]);
+      return res.status(201).json({
+        status: 'success',
+        message: 'Admin created successfully',
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: error.message,
+      });
+    }
+  }
+
+  static async disableAdmin(req, res) {
+    try {
+      const { userId } = req.params;
+      const user = await pool.query(queries.selectUserId, [userId]);
+      if (user.rowCount === 0) {
+        return res.status(404).json({ message: 'user not found' });
+      }
+      await pool.query(queries.disableAdmin, [userId]);
+      return res.status(201).json({
+        status: 'success',
+        message: 'Admin Removed successfully',
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: error.message,
       });
     }
   }
