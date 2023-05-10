@@ -359,7 +359,7 @@ class UserController {
       if (user.rowCount === 0) {
         return res.status(404).json({ message: 'user not found' });
       }
-      const newAdmin = await pool.query(queries.makeAdmin, [userId]);
+      await pool.query(queries.makeAdmin, [userId]);
       return res.status(201).json({
         status: 'success',
         message: 'Admin created successfully',

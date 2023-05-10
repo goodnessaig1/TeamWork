@@ -12,5 +12,6 @@ router.delete(
 );
 
 router.get('/', authorization, controller.getAllColors);
+router.patch('/:colorId', authorization, isAdmin, controller.updateColors);
 
 module.exports = router;
