@@ -8,7 +8,7 @@ const selectUserDetails = 'SELECT * FROM users WHERE id =$1';
 
 //   GIF COMMENT
 const createGifComment = `INSERT INTO gif_comment (gif_id, comment, author_id, created_at, user_name )VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-const getGifComments = `SELECT c.gif_id as post_id, c.comment, c.created_at as date, c.author_id as authorId, CONCAT(u.first_name, ' ', u.last_name) as post_author,
+const getGifComments = `SELECT c.gif_id as post_id,u.is_admin as isAdmin, c.comment, c.created_at as date, c.author_id as authorId, CONCAT(u.first_name, ' ', u.last_name) as post_author,
 u.profile_pix as comment_author_profile 
 FROM gif_comment c
 LEFT JOIN users u ON u.id = c.author_id
@@ -25,6 +25,7 @@ const getUpdatedGif = `
         g.title as title, 
         g.image_url as post, 
         g.created_at as post_date, 
+        u.is_admin isAdmin,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
         u.id as user_id,
         u.profile_pix as profile,
@@ -37,6 +38,7 @@ const getUpdatedGif = `
                 gc.id, 
                 gc.comment, 
                 gc.created_at as comment_date, 
+                u.is_admin as isAdmin,
                 CONCAT(u.first_name, ' ', u.last_name) as comment_author,
                 u.profile_pix as comment_author_profile
             FROM 

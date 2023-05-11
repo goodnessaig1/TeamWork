@@ -3,7 +3,7 @@ const queries = require('../queries/colorQuery');
 
 require('../models/colorModel')();
 
-class categoryController {
+class colorController {
   static async createColor(req, res) {
     try {
       const { colorName, color } = req.body;
@@ -50,6 +50,28 @@ class categoryController {
     }
   }
 
+  static async updateColors(req, res) {
+    try {
+      const { colorId } = req.params;
+      const { color, colorName } = req.body;
+      const selectColor = await pool.query(queries.selectColor, [colorId]);
+      if (selectColor.rowCount === 0) {
+        return res.status(404).json({ message: 'color  not found' });
+      }
+      const values = [color, colorName, colorId];
+      const updateColor = await pool.query(queries.updateColor, values);
+      return res.status(200).json({
+        status: 'success',
+        data: updateColor.rows,
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
+
   static async deleteSingleColor(req, res) {
     try {
       const { colorId } = req.params;
@@ -72,4 +94,4 @@ class categoryController {
   }
 }
 
-module.exports = categoryController;
+module.exports = colorController;

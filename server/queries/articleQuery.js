@@ -15,7 +15,7 @@ const getSingleArticle = `SELECT * FROM articles WHERE id = $1`;
 const deleteSingleArticle = `DELETE FROM articles WHERE id = $1`;
 
 // ARTCLE COMMENT QUERY
-const getArticleComment = `SELECT c.article_id as post_id, c.comment, c.created_at as date, c.author_id as authorId, CONCAT(u.first_name, ' ', u.last_name) as post_author,
+const getArticleComment = `SELECT c.article_id as post_id,u.is_admin as isAdmin, c.comment, c.created_at as date, c.author_id as authorId, CONCAT(u.first_name, ' ', u.last_name) as post_author,
 u.profile_pix as comment_author_profile 
 FROM articles_comments c
 LEFT JOIN users u ON u.id = c.author_id
@@ -35,6 +35,7 @@ const getUpdatedArticle = `
         a.article as post, 
         a.created_at as post_date, 
         col.color,
+        u.is_admin as isAdmin,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
         u.id as user_id,
         u.profile_pix as profile,
@@ -46,7 +47,8 @@ const getUpdatedArticle = `
             SELECT 
                 ac.id, 
                 ac.comment, 
-                ac.created_at as comment_date, 
+                ac.created_at as comment_date,
+                u.is_admin as isAdmin, 
                 CONCAT(u.first_name, ' ', u.last_name) as comment_author,
                 u.profile_pix as comment_author_profile
             FROM 

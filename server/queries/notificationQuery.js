@@ -22,6 +22,7 @@ SELECT
       n.notification_message as message, 
       notification_read, 
       u2.profile_pix as author_pix,
+      u2.is_admin as isAdmin,
       CONCAT(u2.first_name, ' ', u2.last_name) as notifications_author
         FROM article_notifications n 
         LEFT JOIN articles a ON a.id = n.article_id
@@ -38,6 +39,7 @@ SELECT
       n.notification_message as message, 
       n.notification_read,
       u2.profile_pix as author_pix,
+      u2.is_admin as isAdmin,
       CONCAT(u2.first_name, ' ', u2.last_name) as notifications_author
         FROM gif_notifications n 
         LEFT JOIN gifs g ON g.id = n.gif_id
@@ -76,6 +78,7 @@ SELECT
       n.notification_message as message, 
       notification_read, 
       u2.profile_pix as author_pix,
+      u2.is_admin as isAdmin,
       CONCAT(u2.first_name, ' ', u2.last_name) as notifications_author
         FROM article_notifications n 
         LEFT JOIN articles a ON a.id = n.article_id
@@ -92,6 +95,7 @@ SELECT
       n.notification_message as message, 
       n.notification_read,
       u2.profile_pix as author_pix,
+      u2.is_admin as isAdmin,
       CONCAT(u2.first_name, ' ', u2.last_name) as notifications_author
         FROM gif_notifications n 
         LEFT JOIN gifs g ON g.id = n.gif_id
