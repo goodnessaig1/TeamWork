@@ -33,4 +33,7 @@ router.patch(
   controller.disableAdmin
 );
 
+router.get('/search', authorizations, controller.SearchUserByName);
+router.get('/:userId', authorizations, controller.GetUserData);
+
 module.exports = router;

@@ -182,8 +182,8 @@ class UserController {
 
   static async userAuth(req, res) {
     try {
-      const email = req.user.email;
-      const user = await pool.query(queries.userAuth, [email]);
+      const { userId } = req.user;
+      const user = await pool.query(queries.userAuth, [userId]);
       return res.status(200).json({
         status: 'success',
         data: {
@@ -388,6 +388,53 @@ class UserController {
       res.status(500).send({
         message: 'Server Error',
         error: error.message,
+      });
+    }
+  }
+
+  static async GetUserData(req, res) {
+    try {
+      const { userId } = req.params;
+      const currentUser = req.user.userId;
+      const { offset, limit } = req.query;
+      const user = await pool.query(queries.userAuth, [userId]);
+      if (user.rowCount === 0) {
+        return res.status(404).json({ message: 'user not found' });
+      }
+      const values = [currentUser, userId, limit || 10, offset || 0];
+      const userPosts = await pool.query(queries.userPosts, values);
+      const totalPost = await pool.query(queries.totalRows, [userId]);
+      return res.status(201).json({
+        status: 'success',
+        data: {
+          user: user.rows[0],
+          userPosts: userPosts.rows,
+          totalPost: totalPost.rows[0],
+        },
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: error.message,
+      });
+    }
+  }
+
+  static async SearchUserByName(req, res) {
+    const { searchString } = req.query;
+    try {
+      if (searchString === '') {
+        return [];
+      }
+      const users = await pool.query(queries.searchUser, [`%${searchString}%`]);
+      return res.status(200).json({
+        status: 'success',
+        data: users.rows,
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
       });
     }
   }
