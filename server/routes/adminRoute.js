@@ -19,6 +19,8 @@ router.delete(
   controller.deleteUser
 );
 
+router.patch('/update_user/:Id', authorizations, controller.UpdateUserDetails);
+
 router.patch(
   '/make_admin/:userId',
   authorizations,

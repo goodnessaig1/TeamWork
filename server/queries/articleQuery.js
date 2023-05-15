@@ -35,6 +35,7 @@ const getUpdatedArticle = `
         a.article as post, 
         a.created_at as post_date, 
         col.color,
+        a.color_id as color_id,
         u.is_admin as isAdmin,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
         u.id as user_id,

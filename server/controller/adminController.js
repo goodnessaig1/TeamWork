@@ -4,6 +4,7 @@ const pool = require('../models/db');
 const queries = require('../queries/adminQuery');
 const { createToken } = require('../utils/jwtGenerator');
 const cloudinary = require('cloudinary').v2;
+const { DateTime } = require('luxon');
 
 require('../models/userModel')();
 require('dotenv').config();
@@ -430,6 +431,41 @@ class UserController {
       return res.status(200).json({
         status: 'success',
         data: users.rows,
+      });
+    } catch (err) {
+      res.status(500).send({
+        message: 'Server Error',
+        error: err.message,
+      });
+    }
+  }
+
+  static async UpdateUserDetails(req, res) {
+    try {
+      const { Id } = req.params;
+      const { firstName, lastName, address, phoneNumber } = req.body;
+      const user = await pool.query(queries.selectUserId, [Id]);
+      const { userId } = req.user;
+      if (user.rowCount === 0)
+        return res.status(404).json({
+          status: 'Failed',
+          message: 'User Not Found',
+        });
+      if (user.rows[0].id !== userId) {
+        return res.status(403).json({
+          status: 'Failed',
+          message: 'You cannot update this user',
+        });
+      }
+      const updatedAt = DateTime.now();
+      const values = [firstName, lastName, updatedAt, address, phoneNumber, Id];
+      const updateUser = await pool.query(queries.updateUser, values);
+      return res.status(201).json({
+        status: 'success',
+        data: {
+          message: 'User Details successfully updated',
+          userData: updateUser.rows[0],
+        },
       });
     } catch (err) {
       res.status(500).send({

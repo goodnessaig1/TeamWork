@@ -43,6 +43,7 @@ SELECT
     post, 
     post_date,
 	color,
+  color_id,
     post_author,
 	user_id,
     isAdmin,
@@ -59,6 +60,7 @@ FROM
         a.article as post, 
         a.created_at as post_date,
 	 	col.color,
+    a.color_id as color_id,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
 	 	u.id as user_id,
         u.is_admin as isAdmin,
@@ -97,6 +99,7 @@ FROM
         g.image_url as post, 
         g.created_at as post_date, 
 	 	NULL as color,
+	 	NULL as color_id,
         CONCAT(u.first_name, ' ', u.last_name) as post_author,
 	 	u.id as user_id,
         u.is_admin as isAdmin,
@@ -142,6 +145,8 @@ SELECT
 const searchUser = `SELECT * FROM users WHERE LOWER(first_name) LIKE LOWER($1) OR LOWER(last_name) LIKE LOWER($1)
  `;
 
+const updateUser =
+  'UPDATE users SET first_name = $1, last_name = $2, updated_at = $3, address = $4, number = $5 WHERE id = $6  RETURNING *';
 module.exports = {
   checkIfUserExist,
   createNewUser,
@@ -160,4 +165,5 @@ module.exports = {
   userPosts,
   totalRows,
   searchUser,
+  updateUser,
 };
